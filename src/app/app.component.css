@@ -1,0 +1,41 @@
+/* src/app/app.component.css */
+
+.main-layout-container { /* Usamos la clase para mayor especificidad */
+  display: grid;
+  min-height: 100vh;
+  grid-template-rows: auto 1fr auto; /* Fila 1: navbar, Fila 2: main (contenido), Fila 3: footer */
+  grid-template-columns: 1fr; /* Una única columna para el contenido */
+  overflow: hidden; /* Mantiene cualquier desbordamiento interno dentro de los límites */
+}
+
+app-navbar-pw {
+  grid-column: 1 / -1; /* Ocupa todo el ancho de la columna */
+  grid-row: 1; /* Primera fila */
+  position: sticky; /* O fixed si quieres que la barra se quede pegada aunque la página se mueva*/
+  top: 0;
+  z-index: 1000; /* Asegura que la navbar esté siempre encima de otros elementos */
+}
+
+main {
+  box-sizing: border-box; /* Incluye padding en el tamaño total */
+  grid-column: 1; /* Ocupa la primera y única columna */
+  grid-row: 2; /* Ocupa la segunda fila (la del contenido principal) */
+  padding-top: 85px; /* Padding superior para evitar que el contenido se oculte bajo el navbar */
+  /*
+    ¡IMPORTANTE! Eliminar o ajustar el padding-right.
+    Si el login-pw está en una ruta diferente y solo aparece cuando esa ruta está activa,
+    este padding no debe ser global a 'main'.
+
+    Podríamos considerar un padding lateral general si lo deseas:
+    padding-left: 20px;
+    padding-right: 20px;
+  */
+  padding-left: 5%; /* Añade un padding lateral para que el contenido no pegue a los bordes */
+  padding-right: 5%; /* Añade un padding lateral para que el contenido no pegue a los bordes */
+  width: 100%; /* Asegura que el main intente ocupar el 100% del espacio de su celda de grid */
+}
+
+app-footer-pw {
+  grid-column: 1; /* Ocupa la primera y única columna */
+  grid-row: 3; /* Ocupa la tercera fila (la del footer) */
+}

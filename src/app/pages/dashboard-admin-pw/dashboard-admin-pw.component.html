@@ -1,0 +1,52 @@
+<div class="dashboard-container">
+  <h1>Gestión de becarios</h1>
+
+  <div class="toolbar">
+    <div class="search-bar">
+      <input
+        type="text"
+        [(ngModel)]="searchTerm"
+        (input)="onSearch()"
+        placeholder="Buscar por nombre, email o estado..."
+      />
+      <button (click)="onSearch()" class="search-button">Buscar</button>
+    </div>
+    <button (click)="onAddBecario()" class="add-button">Añadir nuevo becario</button>
+  </div>
+
+  <div class="becarios-table-container">
+    <table class="becarios-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre completo</th>
+          <th>Correo electrónico</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngIf="filteredBecarios.length === 0">
+          <td colspan="5" class="no-results">No se encontraron becarios.</td>
+        </tr>
+        <tr *ngFor="let becario of filteredBecarios">
+          <td>{{ becario.id }}</td>
+          <td>{{ becario.nombre }}</td>
+          <td>{{ becario.email }}</td>
+          <td [ngClass]="{
+            'status-active': becario.estado === 'Activo',
+            'status-pending': becario.estado === 'Pendiente',
+            'status-inactive': becario.estado === 'Inactivo'
+          }">
+            {{ becario.estado }}
+          </td>
+          <td class="actions">
+            <button (click)="onViewDocuments(becario.id)" class="action-button view">Ver Documentos</button>
+            <button (click)="onEditBecario(becario.id)" class="action-button edit">Editar</button>
+            <button (click)="onDeleteBecario(becario.id)" class="action-button delete">Eliminar</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -1,0 +1,28 @@
+<div class="overlay" [class.active]="isOpen" (click)="closePanel()"></div>
+
+<div class="login-panel-container" [class.open]="isOpen">
+  <button class="close-button" (click)="closePanel()">
+    <i class="fas fa-times"></i>
+  </button>
+
+  <i id="user" class="fas fa-user-circle"></i>
+  <h2>Iniciar sesión</h2>
+
+  <form (ngSubmit)="onSubmit()">
+    <label for="email">Correo:</label>
+    <input type="email" id="email" name="email" [(ngModel)]="email" required>
+
+    <label for="password">Contraseña:</label>
+    <input type="password" id="password" name="password" [(ngModel)]="password" required>
+
+    <button type="submit">Entrar</button>
+    <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
+
+    <p class="register-link">¿No tienes cuenta? <a [routerLink]="['/register-pw']" (click)="closePanel()">Regístrate aquí</a></p>
+  </form>
+</div>
+
+<button class="toggle-button" (click)="togglePanel()">
+  <i class="fas fa-chevron-left" *ngIf="isOpen"></i>
+  <i class="fas fa-chevron-right" *ngIf="!isOpen"></i>
+</button>

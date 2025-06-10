@@ -1,0 +1,136 @@
+.about-container {
+  padding: 100px 5% 40px; /* Ajuste para navbar */
+  max-width: 100%;
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
+  color: #333;
+  text-align: center;
+}
+
+h1 {
+  color: #472d30;
+  margin-bottom: 15px;
+  font-size: 2.8em;
+}
+
+.subtitle {
+  font-size: 1.2em;
+  color: #666;
+  margin-bottom: 40px;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.6;
+}
+
+.about-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 25px;
+  justify-content: center;
+  align-items: stretch;
+  margin-bottom: 50px;
+}
+
+.about-card {
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.about-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+}
+
+.card-icon-placeholder {
+  font-size: 3em;
+  margin-bottom: 15px;
+  color: #ffe1a8; /* Color de tu marca */
+}
+
+.about-card h2 {
+  color: #472d30;
+  font-size: 1.6em;
+  margin-top: 0;
+  margin-bottom: 15px;
+}
+
+.about-card p {
+  font-size: 1em;
+  color: #555;
+  line-height: 1.6;
+  flex-grow: 1; /* Permite que el texto se estire */
+}
+
+.cta-section {
+  background-color: #f0f0f0;
+  padding: 50px 30px;
+  border-radius: 12px;
+  margin-top: 50px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+}
+
+.cta-section h2 {
+  color: #472d30;
+  font-size: 2.2em;
+  margin-bottom: 15px;
+}
+
+.cta-section p {
+  font-size: 1.1em;
+  color: #666;
+  margin-bottom: 30px;
+}
+
+.btn-primary-about {
+  display: inline-block;
+  background-color: #ffe1a8;
+  color: #472d30;
+  padding: 15px 30px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 1.1em;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn-primary-about:hover {
+  background-color: #f7d499;
+  transform: translateY(-3px);
+}
+
+@media (max-width: 768px) {
+  h1 {
+    font-size: 2em;
+  }
+  .subtitle {
+    font-size: 1em;
+  }
+  .about-cards-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .about-card {
+    margin: 0 3%;
+  }
+  .cta-section {
+    padding: 30px 20px;
+  }
+  .cta-section h2 {
+    font-size: 1.8em;
+  }
+  .cta-section p {
+    font-size: 1em;
+  }
+  .btn-primary-about {
+    font-size: 1em;
+    padding: 12px 25px;
+  }
+}

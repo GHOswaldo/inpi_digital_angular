@@ -1,0 +1,25 @@
+<div class="programs-container">
+  <h1>Nuestros programas de apoyo</h1>
+  <p class="subtitle">Descubre cómo el INPI impulsa el desarrollo y bienestar de los pueblos indígenas.</p>
+
+  <div class="program-cards-grid">
+    <div *ngFor="let programa of programas" class="program-card">
+      <div class="card-image-wrapper">
+        <img [src]="programa.imagenUrl" [alt]="programa.nombre" class="program-image" />
+      </div>
+      <div class="card-content">
+        <h2>{{ programa.nombre }}</h2>
+        <p>{{ programa.descripcion }}</p>
+        <div class="video-container">
+          <iframe
+            [src]="getSafeYouTubeUrl(programa.youtubeVideoId)"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+          ></iframe>
+        </div>
+        <a href="#" class="btn-more-info">Más información del programa</a>
+      </div>
+    </div>
+  </div>
+</div>

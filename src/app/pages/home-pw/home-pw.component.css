@@ -1,0 +1,123 @@
+/* src/app/pages/home-pw/home-pw.component.css */
+.home-container {
+  padding: 100px 5% 40px; /* Ajuste para navbar y footer */
+  max-width: 900px; /* Un ancho razonable para el contenido */
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
+  color: #333;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 40px; /* Espacio entre secciones */
+}
+
+.welcome-card {
+  background-color: #fff;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.welcome-card h1 {
+  color: #472d30;
+  font-size: 2.8em;
+  margin-bottom: 25px;
+}
+
+.welcome-card p {
+  font-size: 1.15em;
+  line-height: 1.7;
+  margin-bottom: 20px;
+  color: #555;
+}
+
+.button-group {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.btn-primary, .btn-secondary {
+  display: inline-block;
+  padding: 15px 30px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 1.1em;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn-primary {
+  background-color: #472d30; /* Color principal de tu marca */
+  color: white;
+  border: 2px solid #472d30;
+}
+
+.btn-primary:hover {
+  background-color: #3a2427;
+  transform: translateY(-3px);
+}
+
+.btn-secondary {
+  background-color: #ffe1a8; /* Color secundario de tu marca */
+  color: #472d30;
+  border: 2px solid #ffe1a8;
+}
+
+.btn-secondary:hover {
+  background-color: #f7d499;
+  transform: translateY(-3px);
+}
+
+.mission-statement {
+  background-color: #f0f0f0;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+}
+
+.mission-statement h2 {
+  color: #472d30;
+  font-size: 2.2em;
+  margin-bottom: 15px;
+}
+
+.mission-statement p {
+  font-style: italic;
+  font-size: 1.1em;
+  color: #666;
+  line-height: 1.6;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .home-container {
+    padding: 100px 3% 30px;
+  }
+  .welcome-card {
+    padding: 30px;
+  }
+  .welcome-card h1 {
+    font-size: 2em;
+  }
+  .welcome-card p {
+    font-size: 1em;
+  }
+  .button-group {
+    flex-direction: column;
+    gap: 15px;
+  }
+  .btn-primary, .btn-secondary {
+    width: 100%;
+    font-size: 1em;
+    padding: 12px 25px;
+  }
+  .mission-statement h2 {
+    font-size: 1.8em;
+  }
+  .mission-statement p {
+    font-size: 1em;
+  }
+}

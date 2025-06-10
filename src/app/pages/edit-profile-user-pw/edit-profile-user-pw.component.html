@@ -1,0 +1,83 @@
+<div class="edit-profile-container">
+  <h1>Editar información personal</h1>
+
+  <form (ngSubmit)="onSave()">
+    <div class="profile-picture-section">
+      <img
+        [src]="userProfile.profileImageUrl || 'assets/default-profile.png'"
+        alt="Foto de Perfil"
+        class="profile-picture"
+      />
+      <div class="file-upload-controls">
+        <label for="profilePictureInput" class="custom-file-upload">
+          {{ selectedProfileImageFile ? selectedProfileImageFile.name : 'Seleccionar Foto' }}
+        </label>
+        <input
+          id="profilePictureInput"
+          type="file"
+          (change)="onProfilePictureSelected($event)"
+          accept="image/*"
+        />
+        <button
+          type="button"
+          (click)="onUploadProfilePicture()"
+          [disabled]="!selectedProfileImageFile"
+          class="upload-photo-button"
+        >
+          Subir Foto
+        </button>
+      </div>
+      <p class="file-hint">Formatos permitidos: JPG, PNG, GIF. Tamaño máximo: 2MB.</p>
+    </div>
+
+    <div class="form-group">
+      <label for="nombre">Nombre(s):</label>
+      <input type="text" id="nombre" [(ngModel)]="userProfile.nombre" name="nombre" required />
+    </div>
+
+    <div class="form-group">
+      <label for="apellido">Apellido(s):</label>
+      <input type="text" id="apellido" [(ngModel)]="userProfile.apellido" name="apellido" required />
+    </div>
+
+    <div class="form-group">
+      <label for="email">Correo electrónico:</label>
+      <input type="email" id="email" [(ngModel)]="userProfile.email" name="email" readonly />
+    </div>
+
+    <div class="form-group">
+      <label for="telefono">Número de teléfono:</label>
+      <input type="tel" id="telefono" [(ngModel)]="userProfile.telefono" name="telefono" />
+    </div>
+
+    <div class="form-group">
+      <label for="direccion">Dirección:</label>
+      <input type="text" id="direccion" [(ngModel)]="userProfile.direccion" name="direccion" />
+    </div>
+
+    <div class="form-group">
+      <label for="ciudad">Ciudad:</label>
+      <input type="text" id="ciudad" [(ngModel)]="userProfile.ciudad" name="ciudad" />
+    </div>
+
+    <div class="form-group">
+      <label for="estado">Estado:</label>
+      <input type="text" id="estado" [(ngModel)]="userProfile.estado" name="estado" />
+    </div>
+
+    <div class="form-group">
+      <label for="codigoPostal">Código postal:</label>
+      <input type="text" id="codigoPostal" [(ngModel)]="userProfile.codigoPostal" name="codigoPostal" pattern="[0-9]{5}" title="Ingresa 5 dígitos" />
+    </div>
+
+    <div class="form-group">
+      <label for="fechaNacimiento">Fecha de nacimiento:</label>
+      <input type="date" id="fechaNacimiento" [(ngModel)]="userProfile.fechaNacimiento" name="fechaNacimiento" />
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="save-button">Guardar cambios</button>
+      <button type="button" (click)="onCancel()" class="cancel-button">Cancelar</button>
+    </div>
+  </form>
+</div>

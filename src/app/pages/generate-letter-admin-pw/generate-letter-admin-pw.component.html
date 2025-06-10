@@ -1,0 +1,24 @@
+<div class="generate-letter-container">
+  <h1>Generar carta modelo</h1>
+
+  <div class="form-section">
+    <label for="becarioSelect">Seleccionar personal:</label>
+    <select id="becarioSelect" [(ngModel)]="selectedBecarioId">
+      <option [ngValue]="null" disabled>-- Selecciona un registro --</option>
+      <option *ngFor="let becario of becarios" [ngValue]="becario.id">
+        {{ becario.nombre }} ({{ becario.email }})
+      </option>
+    </select>
+  </div>
+
+  <div class="action-buttons">
+    <button (click)="onGenerateLetter()" [disabled]="!selectedBecarioId" class="generate-button">Generar carta</button>
+    <button (click)="onDownloadLetter()" [disabled]="!letterContent" class="download-button">Descargar carta</button>
+  </div>
+
+  <div *ngIf="letterContent" class="preview-section">
+    <h2>Vista previa de la carta</h2>
+    <pre>{{ letterContent }}</pre>
+    <p class="note">Nota: Esta es una vista previa del texto. La generación del PDF aún no está lista.</p>
+  </div>
+</div>

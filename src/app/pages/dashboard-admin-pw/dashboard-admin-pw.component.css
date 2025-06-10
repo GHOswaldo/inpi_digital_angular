@@ -1,0 +1,160 @@
+/* src/app/pages/dashboard-admin-pw/dashboard-admin-pw.component.css */
+.dashboard-container {
+  padding: 100px 5% 20px; /* Ajuste para dejar espacio al navbar fijo */
+  max-width: 100%; /* Ajustado a 100% para que se extienda más */
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
+  color: #333;
+}
+
+h1 {
+  text-align: center;
+  color: #472d30;
+  margin-bottom: 30px;
+  font-size: 2.5em;
+}
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.search-bar {
+  display: flex;
+  gap: 10px;
+  flex-grow: 1;
+}
+
+.search-bar input {
+  padding: 10px 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  flex-grow: 1;
+  font-size: 1em;
+}
+
+.search-button, .add-button {
+  background-color: #ffe1a8;
+  color: #472d30;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+  font-weight: bold;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  white-space: nowrap;
+}
+
+.search-button:hover, .add-button:hover {
+  background-color: #f7d499;
+  transform: translateY(-2px);
+}
+
+.becarios-table-container {
+  overflow-x: auto;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.becarios-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.becarios-table th, .becarios-table td {
+  padding: 12px 15px;
+  border-bottom: 1px solid #eee;
+}
+
+.becarios-table th {
+  background-color: #f8f8f8;
+  color: #555;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 0.9em;
+}
+
+.becarios-table tbody tr:hover {
+  background-color: #f5f5f5;
+}
+
+.no-results {
+  text-align: center;
+  padding: 20px;
+  color: #888;
+  font-style: italic;
+}
+
+/* Estilos para el estado del becario */
+.status-active {
+  color: #28a745; /* Verde */
+  font-weight: bold;
+}
+
+.status-pending {
+  color: #ffc107; /* Amarillo/Naranja */
+  font-weight: bold;
+}
+
+.status-inactive {
+  color: #dc3545; /* Rojo */
+  font-weight: bold;
+}
+
+/* Estilos para los botones de acción en la tabla - COLOR ACTUALIZADO */
+.actions button {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.85em;
+  font-weight: bold;
+  margin-right: 5px;
+  transition: background-color 0.3s ease, opacity 0.3s ease; /* Añadimos transición para background */
+  background-color: #472d30; /* ¡Color uniforme para todos los botones de acción! */
+  color: white; /* Color de texto blanco para contraste */
+}
+
+.actions button:last-child {
+  margin-right: 0;
+}
+
+/* Eliminamos los estilos específicos para .view, .edit, .delete ya que ahora comparten el mismo color de fondo */
+/* .action-button.view { background-color: #007bff; color: white; } */
+/* .action-button.edit { background-color: #17a2b8; color: white; } */
+/* .action-button.delete { background-color: #dc3545; color: white; } */
+
+
+.actions button:hover {
+  background-color: #3a2427; /* Un tono un poco más oscuro al pasar el ratón */
+  opacity: 0.9;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .search-bar {
+    width: 100%;
+  }
+  .add-button {
+    width: 100%;
+  }
+  .becarios-table th, .becarios-table td {
+    padding: 8px 10px;
+    font-size: 0.8em;
+  }
+  .actions button {
+    padding: 4px 8px;
+    font-size: 0.75em;
+  }
+}

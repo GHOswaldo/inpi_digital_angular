@@ -1,0 +1,41 @@
+<div class="help-container">
+  <h1>Centro de ayuda y preguntas frecuentes</h1>
+  <p class="subtitle">Encuentra respuestas a tus dudas y cómo contactarnos.</p>
+
+  <section class="faq-section">
+    <h2>Preguntas frecuentes</h2>
+    <div *ngFor="let faq of faqs" class="faq-item">
+      <button class="faq-question" (click)="toggleFaq(faq)">
+        {{ faq.pregunta }}
+        <span class="faq-icon">{{ faq.abierta ? '-' : '+' }}</span>
+      </button>
+      <div class="faq-answer" [ngClass]="{'open': faq.abierta}">
+        <p>{{ faq.respuesta }}</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="help-video-section">
+    <h2>Video tutorial</h2>
+    <div class="video-container">
+      <iframe
+        [src]="getSafeYouTubeUrl(helpVideoId)"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen
+      ></iframe>
+    </div>
+    <p>Mira este video para una guía rápida sobre cómo navegar y utilizar nuestro sistema.</p>
+  </section>
+
+  <section class="contact-section">
+    <h2>Contacto</h2>
+    <p>Si no encuentras lo que buscas, no dudes en contactarnos. Estamos aquí para ayudarte.</p>
+    <div class="contact-info">
+      <p><strong>Correo electrónico:</strong> <a href="mailto:contacto@inpi.gob.mx">contactoinpi.gob.mx</a></p>
+      <p><strong>Teléfono:</strong> <a href="tel:+525555555555">+52 55 5555 5555</a></p>
+      <p><strong>Dirección:</strong> Av. México-Coyoacán 343, Xoco, Benito Juárez, 03330 Ciudad de México, CDMX.</p>
+      <p><strong>Horario de atención:</strong> Lunes a Viernes, de 9:00 a 18:00 hrs.</p>
+    </div>
+  </section>
+</div>

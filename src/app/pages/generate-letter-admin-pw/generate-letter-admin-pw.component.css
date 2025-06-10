@@ -1,0 +1,130 @@
+/* src/app/pages/generate-letter-admin-pw/generate-letter-admin-pw.component.css */
+.generate-letter-container {
+  padding: 100px 5% 20px; /* Ajuste para navbar fijo */
+  max-width: 900px; /* Un poco menos ancho que el dashboard para centrar el contenido */
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
+  color: #333;
+}
+
+h1 {
+  text-align: center;
+  color: #472d30;
+  margin-bottom: 30px;
+  font-size: 2.5em;
+}
+
+.form-section {
+  margin-bottom: 25px;
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.form-section label {
+  display: block;
+  margin-bottom: 10px;
+  font-weight: bold;
+  color: #555;
+}
+
+.form-section select {
+  width: 100%;
+  padding: 10px 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1em;
+  background-color: white;
+  appearance: none; /* Elimina estilos nativos de select */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20256%20256%22%3E%3Cpath%20fill%3D%22%23444%22%20d%3D%22M205.2%2084.7l-77.2%2077.2c-4.7%204.7-12.3%204.7-17%200l-77.2-77.2c-4.7-4.7-4.7-12.3%200-17l17-17c4.7-4.7%2012.3-4.7%2017%200l68.7%2068.7c4.7%204.7%2012.3%204.7%2017%200l68.7-68.7c4.7-4.7%2012.3-4.7%2017%200l17%2017c4.7%204.7%204.7%2012.3%200%2017z%22%2F%3E%3C%2Fsvg%3E'); /* Icono de flecha SVG */
+  background-repeat: no-repeat;
+  background-position: right 15px center;
+  background-size: 1em;
+  cursor: pointer;
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.generate-button, .download-button {
+  background-color: #ffe1a8;
+  color: #472d30;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1.1em;
+  font-weight: bold;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.generate-button:hover, .download-button:hover {
+  background-color: #f7d499;
+  transform: translateY(-2px);
+}
+
+.generate-button:disabled, .download-button:disabled {
+  background-color: #e0e0e0;
+  color: #a0a0a0;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.preview-section {
+  background-color: #f0f0f0;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 25px;
+  margin-top: 30px;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.preview-section h2 {
+  color: #472d30;
+  margin-top: 0;
+  margin-bottom: 15px;
+  font-size: 1.8em;
+  text-align: center;
+}
+
+.preview-section pre {
+  background-color: white;
+  border: 1px solid #e0e0e0;
+  padding: 20px;
+  border-radius: 5px;
+  white-space: pre-wrap; /* Mantiene saltos de línea y espacios */
+  font-family: monospace;
+  font-size: 0.95em;
+  line-height: 1.6;
+  color: #333;
+  min-height: 200px; /* Altura mínima para la vista previa */
+  overflow-y: auto; /* Permite scroll si el contenido es largo */
+}
+
+.note {
+  font-size: 0.9em;
+  color: #777;
+  text-align: center;
+  margin-top: 15px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .generate-letter-container {
+    padding: 100px 3% 20px;
+  }
+  .action-buttons {
+    flex-direction: column;
+    gap: 15px;
+  }
+  .generate-button, .download-button {
+    width: 100%;
+  }
+}

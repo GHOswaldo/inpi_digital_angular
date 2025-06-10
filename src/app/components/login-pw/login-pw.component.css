@@ -1,0 +1,187 @@
+/* Contenedor principal del panel de login */
+.login-panel-container { /* Renombrado de .login-form para mayor claridad */
+  position: fixed;
+  right: 0;
+  top: 100px; /* Ajusta según la altura de tu navbar */
+  width: 350px;
+  height: auto;
+  max-height: 600px;
+  background-color: #fff;
+  padding: 20px 20px;
+  border: 3px solid #472d30;
+  border-right: none; /* Esto se aplica cuando el panel está en el borde derecho */
+  box-shadow: -2px 2px 10px rgba(0, 0, 0, 0.2);
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Centra el contenido del formulario verticalmente */
+  align-items: center; /* Centra el contenido del formulario horizontalmente */
+  transform: translateX(100%); /* <-- Oculta el panel completamente a la derecha por defecto */
+  transition: transform 0.3s ease-in-out;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  box-sizing: border-box; /* Asegura que padding y borde se incluyan en el ancho */
+}
+
+/* Estado 'abierto' del panel */
+.login-panel-container.open { /* Usamos 'open' como tu variable 'isOpen' */
+  transform: translateX(0); /* <-- Muestra el panel, moviéndolo a su posición normal */
+}
+
+/* Título */
+.login-panel-container h2 { /* Ajustado al nuevo nombre de clase */
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #472d30;
+}
+
+/* Icono de usuario */
+#user {
+  font-size: 50px;
+  color: #472d30;
+  margin-bottom: 15px;
+}
+
+/* Controles del formulario (el 'form' dentro del 'panel-container') */
+.login-panel-container form { /* Ajustado al nuevo nombre de clase */
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 300px;
+}
+
+/* Etiquetas */
+.login-panel-container label { /* Ajustado al nuevo nombre de clase */
+  margin-bottom: 6px;
+  font-weight: bold;
+  font-size: 18px;
+  color: #472d30;
+}
+
+/* Inputs */
+.login-panel-container input { /* Ajustado al nuevo nombre de clase */
+  margin-bottom: 15px;
+  padding: 10px;
+  font-size: 16px;
+  border: 2px solid #472d30;
+  border-radius: 5px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Botón de submit */
+.login-panel-container button[type="submit"] { /* Ajustado al nuevo nombre de clase */
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  background-color: #472d30;
+  color: white;
+  border: 2px solid #472d30;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.login-panel-container button[type="submit"]:hover { /* Ajustado al nuevo nombre de clase */
+  background-color: #ffe1a8;
+  color: #472d30;
+}
+
+/* Botón de toggle (la pestaña) */
+.toggle-button {
+  position: fixed; /* <-- Fijo en la ventana */
+  right: 0; /* <-- Alineado a la derecha de la pantalla */
+  top: 50%; /* Centrado verticalmente */
+  transform: translateY(-50%) translateX(0); /* Posición inicial: visible, pegado a la derecha */
+  background-color: #472d30;
+  color: white;
+  width: 50px; /* Ancho de la pestaña */
+  height: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  border: 3px solid #472d30;
+  border-right: none; /* Quitamos el borde derecho */
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+  box-shadow: -2px 2px 10px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease-in-out; /* <-- Animación de movimiento */
+  z-index: 1001; /* <-- Asegura que esté por encima del panel */
+  text-align: center; /* Centra el icono si es necesario */
+}
+
+/* Mueve la pestaña cuando el panel está abierto */
+.login-panel-container.open + .toggle-button {
+  transform: translateY(-50%) translateX(-350px); /* <-- Desplaza la pestaña hacia la izquierda junto al panel */
+  /* El valor de -350px debe coincidir con el `width` del .login-panel-container */
+}
+
+
+.toggle-button i {
+  font-size: 24px;
+  color: #ffe1a8;
+}
+
+/* Overlay */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 998;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+}
+
+.overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Mensajes de error de Firebase */
+.error-message {
+  color: #d9534f; /* Rojo para mensajes de error */
+  text-align: center;
+  margin-top: 15px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/* En login-pw.component.css */
+.register-link {
+  margin-top: 20px;
+  font-size: 14px;
+  color: #472d30;
+}
+
+.register-link a {
+  color: #472d30; /* O el color de tu tema para enlaces */
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.register-link a:hover {
+  text-decoration: underline;
+}
+
+/* Botón de cerrar (la 'X' dentro del panel) */
+.close-button {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  color: #472d30; /* Color para la 'X' */
+  font-size: 1.5em;
+  cursor: pointer;
+  padding: 5px;
+  line-height: 1;
+}
+
+.close-button:hover {
+  color: #ffe1a8;
+}

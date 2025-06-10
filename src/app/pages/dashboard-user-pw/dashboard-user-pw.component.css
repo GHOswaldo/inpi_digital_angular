@@ -1,0 +1,204 @@
+/* src/app/pages/dashboard-user-pw/dashboard-user-pw.component.css */
+.user-dashboard-container {
+  padding: 100px 5% 20px; /* Ajuste para navbar fijo */
+  max-width: 100%; /* ¡AJUSTADO A 100% PARA QUE SE EXTIENDA MÁS! */
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
+  color: #333;
+}
+
+h1 {
+  text-align: center;
+  color: #472d30;
+  margin-bottom: 30px;
+  font-size: 2.5em;
+}
+
+h2 {
+  color: #472d30;
+  margin-bottom: 20px;
+  font-size: 1.8em;
+  border-bottom: 2px solid #ffe1a8;
+  padding-bottom: 5px;
+}
+
+/* Sección de Subida de Archivos */
+.upload-section {
+  background-color: #f9f9f9;
+  padding: 25px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  margin-bottom: 40px;
+  text-align: center;
+}
+
+.file-input-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  justify-content: center; /* Centra los elementos horizontalmente */
+  align-items: center;
+  margin-bottom: 15px;
+  width: 100%; /* Asegura que el grupo ocupe todo el ancho disponible */
+}
+
+.custom-file-upload {
+  background-color: #472d30; /* Color principal de tu marca */
+  color: white;
+  padding: 12px 25px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+  font-weight: bold;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  white-space: nowrap;
+  flex-grow: 1; /* ¡Permite que el botón se extienda! */
+  text-align: center;
+  max-width: none; /* ¡Elimina el max-width para permitir extensión! */
+}
+
+.custom-file-upload:hover {
+  background-color: #3a2427;
+  transform: translateY(-2px);
+}
+
+input[type="file"] {
+  display: none;
+}
+
+.upload-button {
+  background-color: #ffe1a8;
+  color: #472d30;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+  font-weight: bold;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  white-space: nowrap;
+  flex-grow: 1; /* ¡Permite que el botón se extienda! */
+  max-width: none; /* ¡Elimina el max-width para permitir extensión! */
+}
+
+.upload-button:hover {
+  background-color: #f7d499;
+  transform: translateY(-2px);
+}
+
+.upload-button:disabled {
+  background-color: #e0e0e0;
+  color: #a0a0a0;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.file-hint {
+  font-size: 0.9em;
+  color: #777;
+  margin-top: 10px;
+}
+
+/* Sección de Lista de Documentos (sin cambios significativos) */
+.documents-list-section {
+  background-color: #fff;
+  padding: 25px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.documents-table-container {
+  overflow-x: auto;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.documents-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.documents-table th, .documents-table td {
+  padding: 12px 15px;
+  border-bottom: 1px solid #eee;
+}
+
+.documents-table th {
+  background-color: #f8f8f8;
+  color: #555;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 0.9em;
+}
+
+.documents-table tbody tr:hover {
+  background-color: #f5f5f5;
+}
+
+.no-documents {
+  text-align: center;
+  padding: 20px;
+  color: #888;
+  font-style: italic;
+}
+
+/* Estilos para los botones de acción en la tabla */
+.doc-actions button {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.85em;
+  font-weight: bold;
+  margin-right: 8px;
+  transition: background-color 0.3s ease, opacity 0.3s ease;
+  background-color: #472d30;
+  color: white;
+}
+
+.doc-actions button:last-child {
+  margin-right: 0;
+}
+
+.doc-actions button.download {
+  background-color: #472d30;
+}
+
+.doc-actions button.delete {
+  background-color: #dc3545;
+}
+
+.doc-actions button:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.doc-actions button.delete:hover {
+  background-color: #c9302c;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .user-dashboard-container {
+    padding: 100px 3% 20px;
+  }
+  .file-input-group {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px; /* Reduce un poco el gap en móviles */
+  }
+  .custom-file-upload, .upload-button {
+    max-width: 100%; /* Asegura que ocupen todo el ancho en móviles */
+  }
+  .documents-table th, .documents-table td {
+    padding: 8px 10px;
+    font-size: 0.8em;
+  }
+  .doc-actions button {
+    padding: 4px 8px;
+    font-size: 0.75em;
+    margin-right: 5px;
+  }
+}

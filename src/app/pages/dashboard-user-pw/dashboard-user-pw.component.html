@@ -1,0 +1,45 @@
+<div class="user-dashboard-container">
+  <h1>Mis documentos</h1>
+
+  <div class="upload-section">
+    <h2>Subir nuevo documento</h2>
+    <div class="file-input-group">
+      <label for="fileInput" class="custom-file-upload">
+        {{ selectedFile ? selectedFile.name : 'Seleccionar archivo' }}
+      </label>
+      <input id="fileInput" type="file" (change)="onFileSelected($event)" accept=".pdf, .doc, .docx, .jpg, .png" />
+      <button (click)="onUploadDocument()" [disabled]="!selectedFile" class="upload-button">Subir documentos</button>
+    </div>
+    <p class="file-hint">Formatos permitidos: PDF, PNG.</p>
+  </div>
+
+  <div class="documents-list-section">
+    <h2>Documentos subidos</h2>
+    <div class="documents-table-container">
+      <table class="documents-table">
+        <thead>
+          <tr>
+            <th>Nombre del documento</th>
+            <th>Tipo</th>
+            <th>Fecha de subida</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngIf="misDocumentos.length === 0">
+            <td colspan="4" class="no-documents">Aún no has subido ningún documento.</td>
+          </tr>
+          <tr *ngFor="let doc of misDocumentos">
+            <td>{{ doc.nombre }}</td>
+            <td>{{ doc.tipo }}</td>
+            <td>{{ doc.fechaSubida }}</td>
+            <td class="doc-actions">
+              <button (click)="onDownloadDocument(doc.id)" class="action-button download">Descargar</button>
+              <button (click)="onDeleteDocument(doc.id)" class="action-button delete">Eliminar</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,19 @@
+<div class="about-container">
+  <h1>Acerca del INPI</h1>
+  <p class="subtitl e">
+    INPI: Impulsando el desarrollo y la cultura de los pueblos indígenas de México.
+  </p>
+
+  <div class="about-cards-grid">
+    <div *ngFor="let card of infoCards" class="about-card">
+      <div class="card-icon-placeholder">✨</div> <h2>{{ card.titulo }}</h2>
+      <p [innerHTML]="card.contenido"></p>
+    </div>
+  </div>
+
+  <div class="cta-section">
+    <h2>Trabajamos por un México más justo e incluyente.</h2>
+    <p>Conoce más sobre nuestras iniciativas y cómo puedes sumarte al cambio.</p>
+    <a href="/programs-pw" class="btn-primary-about">Explora nuestros programas</a>
+  </div>
+</div>

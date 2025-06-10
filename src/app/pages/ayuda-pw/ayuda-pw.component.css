@@ -1,0 +1,181 @@
+.help-container {
+  padding: 100px 5% 40px; /* Ajuste para navbar */
+  max-width: 100%;
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
+  color: #333;
+  text-align: center;
+}
+
+h1 {
+  color: #472d30;
+  margin-bottom: 15px;
+  font-size: 2.8em;
+}
+
+.subtitle {
+  font-size: 1.2em;
+  color: #666;
+  margin-bottom: 40px;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.6;
+}
+
+section {
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  margin-bottom: 40px;
+  text-align: left; /* Alinea el contenido de las secciones a la izquierda */
+}
+
+section h2 {
+  color: #472d30;
+  font-size: 2.2em;
+  margin-top: 0;
+  margin-bottom: 25px;
+  text-align: center; /* Centra el título de la sección */
+  border-bottom: 2px solid #ffe1a8;
+  padding-bottom: 10px;
+}
+
+/* Sección de Preguntas Frecuentes */
+.faq-item {
+  margin-bottom: 15px;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  overflow: hidden; /* Para ocultar la respuesta cuando no esté abierta */
+}
+
+.faq-question {
+  width: 100%;
+  background-color: #ffe1a8; /* Color de tu marca */
+  color: #472d30;
+  border: none;
+  padding: 15px 20px;
+  font-size: 1.1em;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-align: left;
+  transition: background-color 0.3s ease;
+}
+
+.faq-question:hover {
+  background-color: #f7d499;
+}
+
+.faq-icon {
+  font-size: 1.5em;
+  font-weight: normal;
+  margin-left: 15px;
+  transition: transform 0.3s ease;
+}
+
+.faq-question.open .faq-icon {
+  transform: rotate(45deg); /* Gira el '+' para simular una 'x' o '-' */
+}
+
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease-out; /* Animación de despliegue */
+  background-color: #fcfcfc;
+  padding: 0 20px; /* Padding vertical solo cuando está abierta */
+  color: #555;
+  line-height: 1.6;
+  font-size: 1em;
+}
+
+.faq-answer.open {
+  max-height: 200px; /* Ajusta esto si las respuestas son muy largas */
+  padding: 15px 20px;
+}
+
+/* Sección de Video Tutorial */
+.help-video-section .video-container {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+  height: 0;
+  overflow: hidden;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.help-video-section .video-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+}
+
+.help-video-section p {
+  text-align: center;
+  font-size: 1em;
+  color: #666;
+  margin-top: 20px;
+}
+
+/* Sección de Contacto */
+.contact-section {
+  text-align: center;
+}
+
+.contact-info {
+  margin-top: 20px;
+  font-size: 1.05em;
+  line-height: 1.8;
+}
+
+.contact-info p {
+  margin-bottom: 8px;
+  color: #444;
+}
+
+.contact-info a {
+  color: #472d30;
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+.contact-info a:hover {
+  color: #ffe1a8;
+  text-decoration: underline;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  h1 {
+    font-size: 2em;
+  }
+  .subtitle {
+    font-size: 1em;
+  }
+  section {
+    padding: 20px;
+    margin: 0 3% 30px;
+  }
+  section h2 {
+    font-size: 1.8em;
+  }
+  .faq-question {
+    font-size: 1em;
+    padding: 12px 15px;
+  }
+  .faq-answer.open {
+    padding: 10px 15px;
+  }
+  .contact-info {
+    font-size: 0.95em;
+  }
+}

@@ -1,0 +1,83 @@
+/* src/app/core/navbar-pw/navbar-pw.component.css */
+
+/* Header / Navbar */
+.header {
+  background-color: #472d30;
+  display: flex;
+  justify-content: flex-end; /* Alinea los elementos al final (derecha) */
+  align-items: center;
+  height: 85px; /* Tu altura de navbar confirmada */
+  padding: 5px 10%;
+  position: fixed; /* Asegura que se fije en la parte superior */
+  top: 0;
+  width: 100%;
+  z-index: 1000; /* Asegura que esté por encima de todo */
+  box-sizing: border-box; /* Incluye padding en el ancho */
+}
+
+.header .logo {
+  cursor: pointer;
+  margin-right: auto; /* Empuja el logo a la izquierda */
+}
+
+.header .logo img {
+  height: 70px;
+  width: auto;
+  transition: all 0.3s;
+}
+
+.header .logo img:hover {
+  transform: scale(1.2);
+}
+
+.header nav {
+  display: flex; /* Añade flexbox a la etiqueta nav */
+  align-items: center; /* Alinea los elementos de la nav verticalmente */
+}
+
+.header .nav-links {
+  list-style: none;
+  margin: 0; /* Elimina el margen predeterminado de la lista */
+  padding: 0; /* Elimina el padding predeterminado de la lista */
+  display: flex; /* Usa flexbox para alinear los ítems de la lista */
+  align-items: center;
+}
+
+.header .nav-links li {
+  padding: 0 20px;
+  transition: transform 0.3s;
+}
+
+.header .nav-links li:hover {
+  transform: scale(1.1);
+}
+
+.header .nav-links a {
+  font-weight: 700;
+  color: #eceff1;
+  text-decoration: none;
+  white-space: nowrap; /* Evita que los enlaces se rompan en varias líneas */
+}
+
+.header .nav-links li a:hover {
+  color: #ffe1a8;
+}
+
+/* Estilo para el botón de cerrar sesión */
+.logout-button {
+  background-color: #d9534f; /* Rojo distintivo para cerrar sesión */
+  color: white;
+  border: none;
+  padding: 9px 25px; /* Ajustado para que sea similar a otros botones */
+  border-radius: 50px; /* Borde más redondeado como tu .btn button */
+  cursor: pointer;
+  font-size: 16px; /* Ajustado para ser consistente */
+  font-weight: 700; /* Ajustado para ser consistente */
+  transition: all 0.3s ease;
+  white-space: nowrap; /* Evita que el texto del botón se rompa */
+}
+
+.logout-button:hover {
+  background-color: #c9302c; /* Rojo más oscuro al pasar el mouse */
+  transform: scale(1.1); /* Consistente con otros hover */
+}

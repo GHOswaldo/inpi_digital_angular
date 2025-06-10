@@ -1,0 +1,27 @@
+<header class="header">
+  <div class="logo" id="reset-main">
+    <a routerLink="/"><img src="img.png" alt="Logo de la marca"></a> </div>
+  <nav>
+    <ul class="nav-links">
+      <li><a routerLink="/programas-pw">Programas</a></li>
+      <li><a routerLink="/acerca-de-pw">Acerca de</a></li>
+      <li><a routerLink="/ayuda-pw">Ayuda</a></li>
+
+      <ng-container *ngIf="(userRole$ | async) as userProfile">
+        <ng-container *ngIf="userProfile && userProfile.role === 'admin'">
+          <li><a routerLink="/dashboard-admin-pw">Gestión de becarios</a></li>
+          <li><a routerLink="/generate-letter-admin-pw">Carta modelo</a></li>
+        </ng-container>
+
+        <ng-container *ngIf="userProfile && userProfile.role === 'cliente'">
+          <li><a routerLink="/dashboard-user-pw">Documentación</a></li>
+          <li><a routerLink="/edit-profile-user-pw">Información personal</a></li>
+        </ng-container>
+      </ng-container>
+
+      <li *ngIf="authService.currentUser$ | async">
+        <button class="logout-button" (click)="onLogout()">Cerrar sesión</button>
+      </li>
+    </ul>
+  </nav>
+</header>
