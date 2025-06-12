@@ -1,6 +1,24 @@
+<!-- src/app/app.component.html -->
+
 <div class="main-layout-container">
+  <!-- Navbar permanece arriba -->
   <app-navbar-pw></app-navbar-pw>
+
+  <!-- Contenido principal de la aplicación -->
   <main>
-    <router-outlet></router-outlet> </main>
+    <router-outlet></router-outlet>
+  </main>
+
+  <!-- Footer permanece abajo -->
   <app-footer-pw></app-footer-pw>
 </div>
+
+<!-- Nueva tarjeta flotante de bienvenida -->
+<div translate="no" class="floating-welcome-card" *ngIf="userName$ | async as userName">
+  <span>¡Hola, {{ userName }}!</span>
+</div>
+
+<!-- Componente de login (la pestaña flotante) -->
+<!-- Se mostrará si NO hay un usuario autenticado. -->
+<!-- No necesita una variable de plantilla aquí porque @ViewChild lo encuentra por tipo. -->
+<app-login-pw *ngIf="(currentUser$ | async) === null"></app-login-pw>

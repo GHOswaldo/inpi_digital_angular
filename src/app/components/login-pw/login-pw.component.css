@@ -1,68 +1,72 @@
-/* Contenedor principal del panel de login */
-.login-panel-container { /* Renombrado de .login-form para mayor claridad */
+/* src/app/components/login-pw/login-pw.component.css */
+
+/* Contenedor principal del panel de login - Estilos base para móviles (Mobile-First) */
+.login-panel-container {
   position: fixed;
   right: 0;
-  top: 100px; /* Ajusta según la altura de tu navbar */
-  width: 350px;
+  top: 50%; /* Usa 50% para centrar verticalmente en relación con el viewport */
+  transform: translateY(-50%) translateX(100%); /* Agrega translateY(-50%) para centrar */
+  width: 100%; /* Ocupa todo el ancho en móvil */
+  max-width: 350px; /* Ancho máximo para el panel */
   height: auto;
-  max-height: 600px;
+  max-height: 90vh; /* Para que no se desborde en pantallas pequeñas */
   background-color: #fff;
-  padding: 20px 20px;
+  padding: 20px;
   border: 3px solid #472d30;
-  border-right: none; /* Esto se aplica cuando el panel está en el borde derecho */
+  border-right: none;
   box-shadow: -2px 2px 10px rgba(0, 0, 0, 0.2);
-  z-index: 999;
+  z-index: 1002; /* CAMBIO CLAVE: Aumenta el z-index para que esté por encima de la tarjeta de bienvenida */
   display: flex;
   flex-direction: column;
-  justify-content: center; /* Centra el contenido del formulario verticalmente */
-  align-items: center; /* Centra el contenido del formulario horizontalmente */
-  transform: translateX(100%); /* <-- Oculta el panel completamente a la derecha por defecto */
+  justify-content: center;
+  align-items: center;
   transition: transform 0.3s ease-in-out;
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
-  box-sizing: border-box; /* Asegura que padding y borde se incluyan en el ancho */
+  box-sizing: border-box;
+  overflow-y: auto; /* Añadir scroll si el contenido es demasiado largo */
 }
 
 /* Estado 'abierto' del panel */
-.login-panel-container.open { /* Usamos 'open' como tu variable 'isOpen' */
-  transform: translateX(0); /* <-- Muestra el panel, moviéndolo a su posición normal */
+.login-panel-container.open {
+  transform: translateY(-50%) translateX(0); /* Mantiene el centrado vertical al abrir */
 }
 
 /* Título */
-.login-panel-container h2 { /* Ajustado al nuevo nombre de clase */
-  font-size: 24px;
-  margin-bottom: 20px;
+.login-panel-container h2 {
+  font-size: 22px; /* Tamaño de fuente más pequeño para móvil */
+  margin-bottom: 15px;
   color: #472d30;
 }
 
 /* Icono de usuario */
 #user {
-  font-size: 50px;
+  font-size: 45px; /* Tamaño de fuente más pequeño para móvil */
   color: #472d30;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
 }
 
-/* Controles del formulario (el 'form' dentro del 'panel-container') */
-.login-panel-container form { /* Ajustado al nuevo nombre de clase */
+/* Controles del formulario */
+.login-panel-container form {
   display: flex;
   flex-direction: column;
-  width: 100%;
-  max-width: 300px;
+  width: 90%; /* Ocupa más ancho en móvil */
+  max-width: 300px; /* Mantiene un ancho máximo para el formulario */
 }
 
 /* Etiquetas */
-.login-panel-container label { /* Ajustado al nuevo nombre de clase */
-  margin-bottom: 6px;
+.login-panel-container label {
+  margin-bottom: 5px;
   font-weight: bold;
-  font-size: 18px;
+  font-size: 16px; /* Tamaño de fuente más pequeño */
   color: #472d30;
 }
 
 /* Inputs */
-.login-panel-container input { /* Ajustado al nuevo nombre de clase */
-  margin-bottom: 15px;
-  padding: 10px;
-  font-size: 16px;
+.login-panel-container input {
+  margin-bottom: 10px; /* Margen más compacto */
+  padding: 8px; /* Padding más pequeño */
+  font-size: 14px; /* Tamaño de fuente más pequeño */
   border: 2px solid #472d30;
   border-radius: 5px;
   width: 100%;
@@ -70,10 +74,10 @@
 }
 
 /* Botón de submit */
-.login-panel-container button[type="submit"] { /* Ajustado al nuevo nombre de clase */
+.login-panel-container button[type="submit"] {
   width: 100%;
   padding: 10px;
-  font-size: 16px;
+  font-size: 15px; /* Tamaño de fuente ligeramente más pequeño */
   background-color: #472d30;
   color: white;
   border: 2px solid #472d30;
@@ -82,44 +86,42 @@
   transition: all 0.3s ease;
 }
 
-.login-panel-container button[type="submit"]:hover { /* Ajustado al nuevo nombre de clase */
+.login-panel-container button[type="submit"]:hover {
   background-color: #ffe1a8;
   color: #472d30;
 }
 
-/* Botón de toggle (la pestaña) */
+/* Botón de toggle (la pestaña) - Estilos base para móviles (Mobile-First) */
 .toggle-button {
-  position: fixed; /* <-- Fijo en la ventana */
-  right: 0; /* <-- Alineado a la derecha de la pantalla */
-  top: 50%; /* Centrado verticalmente */
-  transform: translateY(-50%) translateX(0); /* Posición inicial: visible, pegado a la derecha */
+  position: fixed;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%) translateX(0);
   background-color: #472d30;
   color: white;
-  width: 50px; /* Ancho de la pestaña */
-  height: 80px;
+  width: 40px; /* Ancho más pequeño para la pestaña en móvil */
+  height: 60px; /* Altura más pequeña */
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
   border: 3px solid #472d30;
-  border-right: none; /* Quitamos el borde derecho */
+  border-right: none;
   border-top-left-radius: 8px;
   border-bottom-left-radius: 8px;
   box-shadow: -2px 2px 10px rgba(0, 0, 0, 0.2);
-  transition: transform 0.3s ease-in-out; /* <-- Animación de movimiento */
-  z-index: 1001; /* <-- Asegura que esté por encima del panel */
-  text-align: center; /* Centra el icono si es necesario */
+  transition: transform 0.3s ease-in-out;
+  z-index: 1003; /* CAMBIO CLAVE: Aumenta el z-index del botón de toggle */
+  text-align: center;
 }
 
-/* Mueve la pestaña cuando el panel está abierto */
+/* Mueve la pestaña cuando el panel está abierto en móvil */
 .login-panel-container.open + .toggle-button {
-  transform: translateY(-50%) translateX(-350px); /* <-- Desplaza la pestaña hacia la izquierda junto al panel */
-  /* El valor de -350px debe coincidir con el `width` del .login-panel-container */
+  transform: translateY(-50%) translateX(-350px);
 }
-
 
 .toggle-button i {
-  font-size: 24px;
+  font-size: 20px; /* Tamaño de icono más pequeño */
   color: #ffe1a8;
 }
 
@@ -131,7 +133,7 @@
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
-  z-index: 998;
+  z-index: 998; /* Se mantiene por debajo del panel de login */
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
@@ -144,22 +146,22 @@
 
 /* Mensajes de error de Firebase */
 .error-message {
-  color: #d9534f; /* Rojo para mensajes de error */
+  color: #d9534f;
   text-align: center;
-  margin-top: 15px;
-  font-size: 14px;
+  margin-top: 10px; /* Margen más compacto */
+  font-size: 13px; /* Tamaño de fuente más pequeño */
   font-weight: bold;
 }
 
 /* En login-pw.component.css */
 .register-link {
-  margin-top: 20px;
-  font-size: 14px;
+  margin-top: 15px; /* Margen más compacto */
+  font-size: 13px; /* Tamaño de fuente más pequeño */
   color: #472d30;
 }
 
 .register-link a {
-  color: #472d30; /* O el color de tu tema para enlaces */
+  color: #472d30;
   font-weight: bold;
   text-decoration: none;
 }
@@ -171,12 +173,12 @@
 /* Botón de cerrar (la 'X' dentro del panel) */
 .close-button {
   position: absolute;
-  top: 15px;
-  right: 15px;
+  top: 10px; /* Posición más compacta */
+  right: 10px; /* Posición más compacta */
   background: none;
   border: none;
-  color: #472d30; /* Color para la 'X' */
-  font-size: 1.5em;
+  color: #472d30;
+  font-size: 1.3em; /* Tamaño de fuente más pequeño */
   cursor: pointer;
   padding: 5px;
   line-height: 1;
@@ -184,4 +186,79 @@
 
 .close-button:hover {
   color: #ffe1a8;
+}
+
+/* Media query para pantallas medianas (tablets y desktops) */
+@media (min-width: 768px) {
+  .login-panel-container {
+    top: 50%; /* También en desktop, usa 50% */
+    transform: translateY(-50%) translateX(100%); /* Incluye translateY(-50%) en el estado inicial para desktop */
+    width: 350px; /* Vuelve al ancho fijo en desktop */
+    max-height: 600px; /* Vuelve a la altura máxima original */
+    padding: 20px; /* Vuelve al padding original */
+  }
+
+  /* Estado 'abierto' del panel en desktop */
+  .login-panel-container.open {
+    transform: translateY(-50%) translateX(0); /* Mantiene el centrado vertical al abrir en desktop */
+  }
+
+  .login-panel-container h2 {
+    font-size: 24px; /* Vuelve al tamaño de fuente original */
+    margin-bottom: 20px;
+  }
+
+  #user {
+    font-size: 50px; /* Vuelve al tamaño de fuente original */
+    margin-bottom: 15px;
+  }
+
+  .login-panel-container form {
+    width: 100%; /* Vuelve al ancho original */
+  }
+
+  .login-panel-container label {
+    font-size: 18px; /* Vuelve al tamaño de fuente original */
+    margin-bottom: 6px;
+  }
+
+  .login-panel-container input {
+    padding: 10px; /* Vuelve al padding original */
+    font-size: 16px; /* Vuelve al tamaño de fuente original */
+    margin-bottom: 15px;
+  }
+
+  .login-panel-container button[type="submit"] {
+    font-size: 16px; /* Vuelve al tamaño de fuente original */
+  }
+
+  .toggle-button {
+    width: 50px; /* Vuelve al ancho original */
+    height: 80px; /* Vuelve a la altura original */
+  }
+
+  /* Mueve la pestaña cuando el panel está abierto en desktop */
+  .login-panel-container.open + .toggle-button {
+    transform: translateY(-50%) translateX(-350px);
+  }
+
+  .toggle-button i {
+    font-size: 24px; /* Vuelve al tamaño de icono original */
+  }
+
+  .error-message {
+    margin-top: 15px;
+    font-size: 14px;
+  }
+
+  .register-link {
+    margin-top: 20px;
+    font-size: 14px;
+  }
+
+  .close-button {
+    top: 15px;
+    right: 15px;
+    font-size: 1.5em;
+  }
 }

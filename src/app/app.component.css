@@ -1,6 +1,6 @@
 /* src/app/app.component.css */
 
-.main-layout-container { /* Usamos la clase para mayor especificidad */
+.main-layout-container {
   display: grid;
   min-height: 100vh;
   grid-template-rows: auto 1fr auto; /* Fila 1: navbar, Fila 2: main (contenido), Fila 3: footer */
@@ -21,21 +21,68 @@ main {
   grid-column: 1; /* Ocupa la primera y única columna */
   grid-row: 2; /* Ocupa la segunda fila (la del contenido principal) */
   padding-top: 85px; /* Padding superior para evitar que el contenido se oculte bajo el navbar */
-  /*
-    ¡IMPORTANTE! Eliminar o ajustar el padding-right.
-    Si el login-pw está en una ruta diferente y solo aparece cuando esa ruta está activa,
-    este padding no debe ser global a 'main'.
-
-    Podríamos considerar un padding lateral general si lo deseas:
-    padding-left: 20px;
-    padding-right: 20px;
-  */
-  padding-left: 5%; /* Añade un padding lateral para que el contenido no pegue a los bordes */
-  padding-right: 5%; /* Añade un padding lateral para que el contenido no pegue a los bordes */
+  
+  /* Ajuste de padding lateral para ser responsivo */
+  padding-left: 2%; /* Menor padding en pantallas pequeñas */
+  padding-right: 2%; /* Menor padding en pantallas pequeñas */
   width: 100%; /* Asegura que el main intente ocupar el 100% del espacio de su celda de grid */
+}
+
+/* Media query para pantallas más grandes (tablets y desktops) */
+@media (min-width: 768px) {
+  main {
+    padding-left: 5%; /* Más padding lateral en pantallas grandes */
+    padding-right: 5%; /* Más padding lateral en pantallas grandes */
+  }
 }
 
 app-footer-pw {
   grid-column: 1; /* Ocupa la primera y única columna */
   grid-row: 3; /* Ocupa la tercera fila (la del footer) */
+}
+
+/* Estilos para la tarjeta flotante de bienvenida */
+.floating-welcome-card {
+  position: fixed; /* Posicionamiento fijo en relación con el viewport */
+  bottom: 20px; /* Separación del borde inferior */
+  left: 20px; /* Separación del borde izquierdo */
+  background-color: #472d30; /* Color de fondo oscuro (similar al de la navbar) */
+  color: #ffe1a8; /* Color de texto claro (similar al de los hover de la navbar) */
+  padding: 12px 20px;
+  border-radius: 10px; /* Bordes redondeados */
+  font-size: 1.1em; /* Tamaño de fuente legible */
+  font-weight: bold;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Sombra para darle profundidad */
+  z-index: 1000; /* Asegura que esté por encima de la mayoría del contenido */
+  white-space: nowrap; /* Evita que el texto se rompa en varias líneas */
+  opacity: 0.95; /* Ligeramente transparente */
+  transition: opacity 0.3s ease-in-out; /* Transición suave para el hover */
+}
+
+.floating-welcome-card:hover {
+  opacity: 1; /* Opacidad completa al pasar el mouse */
+}
+
+/* Anteriormente, esta media query ocultaba la tarjeta en móviles.
+  Ahora la eliminamos para que la tarjeta sea visible en todos los tamaños.
+  Considera ajustar el font-size o padding si el espacio es un problema en teléfonos muy pequeños.
+*/
+/* @media (max-width: 767px) {
+  .floating-welcome-card {
+    display: none;
+  }
+} */
+
+
+/*
+  Opcional: Si la tarjeta es demasiado grande en móviles, puedes ajustar su tamaño aquí.
+  Por ejemplo:
+*/
+@media (max-width: 480px) { /* Para teléfonos muy pequeños */
+  .floating-welcome-card {
+    padding: 8px 15px; /* Reducir padding */
+    font-size: 0.9em; /* Reducir tamaño de fuente */
+    bottom: 10px; /* Acercar al borde inferior */
+    left: 10px; /* Acercar al borde izquierdo */
+  }
 }

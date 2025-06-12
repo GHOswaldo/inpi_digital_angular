@@ -1,24 +1,114 @@
-<div class="generate-letter-container">
-  <h1>Generar carta modelo</h1>
+<!-- src/app/pages/generate-letter-admin-pw/generate-letter-admin-pw.component.html -->
+
+<!-- Cargar la librería html2pdf.js directamente aquí (para el entorno de Canvas) -->
+<!-- En un proyecto Angular real, lo cargarías preferentemente vía angular.json o npm install -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+<div class="letter-generator-container">
+  <h1>Generar recibo de apoyo económico</h1>
 
   <div class="form-section">
-    <label for="becarioSelect">Seleccionar personal:</label>
-    <select id="becarioSelect" [(ngModel)]="selectedBecarioId">
-      <option [ngValue]="null" disabled>-- Selecciona un registro --</option>
-      <option *ngFor="let becario of becarios" [ngValue]="becario.id">
-        {{ becario.nombre }} ({{ becario.email }})
-      </option>
-    </select>
+    <h2>Datos de la Carta Modelo</h2>
+    <div class="form-grid">
+      <div class="form-group">
+        <label for="cantidadNumero">Monto del apoyo ($):</label>
+        <input 
+          type="number" 
+          id="cantidadNumero" 
+          name="cantidadNumero" 
+          [(ngModel)]="cantidadNumero" 
+          (input)="onInputChange()"
+          placeholder="Ej: 1500.50"
+          step="0.01"
+          required
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="mesSeleccionado">Mes correspondiente:</label>
+        <select 
+          id="mesSeleccionado" 
+          name="mesSeleccionado" 
+          [(ngModel)]="mesSeleccionado" 
+          (change)="onInputChange()"
+          required
+        >
+          <option value="" disabled>Selecciona un mes</option>
+          <option *ngFor="let mes of meses" [value]="mes.value">{{ mes.label }}</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="figuraSeleccionada">Figura (Personal INPI):</label>
+        <select 
+          id="figuraSeleccionada" 
+          name="figuraSeleccionada" 
+          [(ngModel)]="figuraSeleccionadaId" 
+          (change)="onFiguraSelect()"
+          required
+        >
+          <option value="" disabled>Selecciona una figura</option>
+          <option *ngFor="let figura of figurasInpi" [value]="figura.id">
+            {{ figura.nombreCompleto }} ({{ figura.cargo }})
+          </option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="ciudadCarta">Ciudad:</label>
+        <input 
+          type="text" 
+          id="ciudadCarta" 
+          name="ciudadCarta" 
+          [(ngModel)]="ciudadCarta" 
+          (input)="onInputChange()"
+          placeholder="Ej: Ciudad de México"
+          required
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="diaCarta">Día:</label>
+        <input 
+          type="number" 
+          id="diaCarta" 
+          name="diaCarta" 
+          [(ngModel)]="diaCarta" 
+          (input)="onInputChange()"
+          placeholder="Ej: 15"
+          min="1"
+          max="31"
+          required
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="anioCarta">Año:</label>
+        <input 
+          type="number" 
+          id="anioCarta" 
+          name="anioCarta" 
+          [(ngModel)]="anioCarta" 
+          (input)="onInputChange()"
+          placeholder="Ej: 2025"
+          min="2000"
+          max="2100"
+          required
+        >
+      </div>
+    </div>
+
+    <button class="generate-pdf-btn" (click)="generatePdf()">
+      <i class="fas fa-file-pdf"></i> Generar PDF
+    </button>
+
+    <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
   </div>
 
-  <div class="action-buttons">
-    <button (click)="onGenerateLetter()" [disabled]="!selectedBecarioId" class="generate-button">Generar carta</button>
-    <button (click)="onDownloadLetter()" [disabled]="!letterContent" class="download-button">Descargar carta</button>
-  </div>
-
-  <div *ngIf="letterContent" class="preview-section">
-    <h2>Vista previa de la carta</h2>
-    <pre>{{ letterContent }}</pre>
-    <p class="note">Nota: Esta es una vista previa del texto. La generación del PDF aún no está lista.</p>
+  <div class="preview-section">
+    <h2>Previsualización de la Carta Modelo</h2>
+    <div id="letter-preview-content" class="letter-content" [innerHTML]="letterPreview">
+      <!-- El contenido de la carta generada se inyectará aquí -->
+    </div>
   </div>
 </div>

@@ -1,8 +1,9 @@
 import { Component, Injector, runInInjectionContext } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { AuthService } from '../../services/auth.service';
+import { AuthService, UserProfile } from '../../services/auth.service'; // Importa UserProfile para tipado
 import { Router, RouterLink } from '@angular/router';
+import { take } from 'rxjs/operators'; // Necesario para .pipe(take(1))
 
 @Component({
   selector: 'app-login-pw',
@@ -35,46 +36,50 @@ export class LoginPwComponent {
     this.errorMessage = null;
 
     try {
+      // Usamos .toPromise() en login, que es el patrón que ya tenías
       const user = await this.authService.login(this.email, this.password).toPromise();
 
       if (user && user.uid) {
         // Limpiar los campos después de un inicio de sesión exitoso
         this.email = '';
         this.password = '';
-        // Fin de la adición para limpiar campos
 
         runInInjectionContext(this.injector, () => {
-          this.authService.getUserRole(user.uid).subscribe(userProfile => {
-            if (userProfile && userProfile.role) {
-              switch (userProfile.role) {
-                case 'admin':
-                  this.router.navigate(['/dashboard-pw']);
-                  break;
-                case 'cliente':
-                  this.router.navigate(['/file-manager']);
-                  break;
-                case 'otro':
-                  this.router.navigate(['/some-other-path']);
-                  break;
-                default:
-                  console.warn(`Rol desconocido: ${userProfile.role}. Redirigiendo a /dashboard-pw.`);
-                  this.router.navigate(['/dashboard-pw']);
+          // CAMBIO CLAVE: Usa getUserProfile y aplica .pipe(take(1)) y tipado
+          this.authService.getUserProfile(user.uid).pipe(take(1)).subscribe(
+            (userProfile: UserProfile | null) => { // Tipado explícito para userProfile
+              if (userProfile && userProfile.role) {
+                switch (userProfile.role) {
+                  case 'admin':
+                    this.router.navigate(['/dashboard-admin-pw']); // Asegúrate de que esta es la ruta correcta
+                    break;
+                  case 'cliente':
+                    this.router.navigate(['/dashboard-user-pw']); // Asegúrate de que esta es la ruta correcta
+                    break;
+                  case 'otro':
+                    this.router.navigate(['/some-other-path']); // Si tienes otra ruta para 'otro'
+                    break;
+                  default:
+                    console.warn(`Rol desconocido: ${userProfile.role}. Redirigiendo a /dashboard-admin-pw.`);
+                    this.router.navigate(['/dashboard-admin-pw']); // Ruta por defecto
+                }
+              } else {
+                console.warn('Usuario logueado sin perfil de Firestore. Redirigiendo a /dashboard-admin-pw por defecto.');
+                this.router.navigate(['/dashboard-admin-pw']); // Ruta por defecto
               }
-            } else {
-              console.warn('Usuario logueado sin perfil de Firestore. Redirigiendo a /dashboard-pw por defecto.');
-              this.router.navigate(['/dashboard-pw']);
+              this.closePanel(); // Cerrar el panel de login después de la redirección
+            },
+            (error: any) => { // Tipado explícito para error
+              console.error('Error al obtener el perfil/rol del usuario:', error);
+              this.errorMessage = 'Error al verificar el rol del usuario. Inténtalo de nuevo.';
             }
-            this.closePanel();
-          }, error => {
-            console.error('Error al obtener el rol del usuario:', error);
-            this.errorMessage = 'Error al verificar el rol del usuario. Inténtalo de nuevo.';
-          });
+          );
         });
 
       } else {
         this.errorMessage = 'Credenciales inválidas. Por favor, verifica tu correo y contraseña.';
       }
-    } catch (error: any) {
+    } catch (error: any) { // Tipado explícito para error en el catch principal
       console.error('Error de login:', error);
       if (error.code === 'auth/invalid-credential' || error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
         this.errorMessage = 'Correo o contraseña incorrectos. Por favor, inténtalo de nuevo.';

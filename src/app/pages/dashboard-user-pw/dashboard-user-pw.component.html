@@ -1,45 +1,59 @@
+<!-- src/app/pages/dashboard-user-pw/dashboard-user-pw.component.html -->
+
 <div class="user-dashboard-container">
-  <h1>Mis documentos</h1>
+  <h1>Gestión de documentación del becario</h1>
 
-  <div class="upload-section">
-    <h2>Subir nuevo documento</h2>
-    <div class="file-input-group">
-      <label for="fileInput" class="custom-file-upload">
-        {{ selectedFile ? selectedFile.name : 'Seleccionar archivo' }}
-      </label>
-      <input id="fileInput" type="file" (change)="onFileSelected($event)" accept=".pdf, .doc, .docx, .jpg, .png" />
-      <button (click)="onUploadDocument()" [disabled]="!selectedFile" class="upload-button">Subir documentos</button>
-    </div>
-    <p class="file-hint">Formatos permitidos: PDF, PNG.</p>
-  </div>
+  <div class="documents-grid">
+    <!-- Columna Izquierda: Carrusel de Carga de Documentos -->
+    <section class="document-upload-panels">
+      <h2>Documentos requeridos</h2>
+      <div class="carousel-wrapper">
+        <button class="carousel-nav-btn prev-btn" (click)="prevDocument()">
+          <i class="fas fa-chevron-left"></i>
+        </button>
 
-  <div class="documents-list-section">
-    <h2>Documentos subidos</h2>
-    <div class="documents-table-container">
-      <table class="documents-table">
-        <thead>
-          <tr>
-            <th>Nombre del documento</th>
-            <th>Tipo</th>
-            <th>Fecha de subida</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngIf="misDocumentos.length === 0">
-            <td colspan="4" class="no-documents">Aún no has subido ningún documento.</td>
-          </tr>
-          <tr *ngFor="let doc of misDocumentos">
-            <td>{{ doc.nombre }}</td>
-            <td>{{ doc.tipo }}</td>
-            <td>{{ doc.fechaSubida }}</td>
-            <td class="doc-actions">
-              <button (click)="onDownloadDocument(doc.id)" class="action-button download">Descargar</button>
-              <button (click)="onDeleteDocument(doc.id)" class="action-button delete">Eliminar</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+        <div class="document-carousel-inner">
+          <div class="carousel-item"
+               *ngFor="let docType of documentTypes; let i = index"
+               [ngClass]="{ 'active': isActive(i) }">
+            
+            <app-document-upload-card-pw
+              [documentName]="docType"
+              [isRequired]="true"
+              (fileSelected)="onFileChange($event)"
+              (previewRequested)="onPreviewRequest($event)"
+              (fileRemoved)="onFileRemoved($event)">
+            </app-document-upload-card-pw>
+            
+          </div>
+        </div>
+
+        <button class="carousel-nav-btn next-btn" (click)="nextDocument()">
+          <i class="fas fa-chevron-right"></i>
+        </button>
+      </div>
+    </section>
+
+    <!-- Columna Derecha: Previsualizador de PDF -->
+    <section class="pdf-viewer-section">
+      <h2>Vista previa</h2>
+      <div class="pdf-viewer-container">
+        <ng-container *ngIf="currentPreviewUrl; else noPreviewTemplate">
+          <iframe [src]="currentPreviewUrl" class="pdf-iframe" frameborder="0"></iframe>
+        </ng-container>
+        <ng-template #noPreviewTemplate>
+          <div class="no-preview-placeholder">
+            <i class="fas fa-file-pdf"></i>
+            <p>Selecciona un documento para previsualizarlo aquí.</p>
+          </div>
+        </ng-template>
+      </div>
+      <p class="preview-file-name">{{ currentPreviewFileName || 'Ningún documento seleccionado' }}</p>
+      
+      <!-- ¡CORRECCIÓN CLAVE AQUÍ! Se añade el evento (click) para llamar a saveExpedient() -->
+      <button class="btn-save-all" [disabled]="!canSaveExpedient()" (click)="saveExpedient()">
+        <i class="fas fa-save"></i> Guardar cambios
+      </button>
+    </section>
   </div>
 </div>

@@ -21,23 +21,37 @@
         <button
           type="button"
           (click)="onUploadProfilePicture()"
-          [disabled]="!selectedProfileImageFile"
+          [disabled]="!selectedProfileImageFile || isUploadingImage"
           class="upload-photo-button"
         >
           Subir Foto
         </button>
+        <!-- Mostrar progreso de subida -->
+        <div *ngIf="isUploadingImage" class="upload-progress">
+          Progreso: {{ uploadProgress | number:'1.0-0' }}%
+        </div>
+        <!-- Botón para eliminar foto de perfil
+        <button
+          type="button"
+          (click)="deleteProfilePicture()"
+          [disabled]="!userProfile.fotoUrl"
+          class="delete-photo-button"
+        >
+          Eliminar Foto
+        </button>
+        -->
       </div>
       <p class="file-hint">Formatos permitidos: JPG, PNG, GIF. Tamaño máximo: 2MB.</p>
     </div>
 
     <div class="form-group">
-      <label for="nombre">Nombre(s):</label>
-      <input type="text" id="nombre" [(ngModel)]="userProfile.nombre" name="nombre" required />
+      <label for="nombres">Nombre(s):</label>
+      <input type="text" id="nombres" [(ngModel)]="userProfile.nombres" name="nombres" required />
     </div>
 
     <div class="form-group">
-      <label for="apellido">Apellido(s):</label>
-      <input type="text" id="apellido" [(ngModel)]="userProfile.apellido" name="apellido" required />
+      <label for="apellidos">Apellido(s):</label>
+      <input type="text" id="apellidos" [(ngModel)]="userProfile.apellidos" name="apellidos" required />
     </div>
 
     <div class="form-group">

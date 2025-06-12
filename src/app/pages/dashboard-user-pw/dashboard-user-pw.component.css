@@ -1,204 +1,329 @@
 /* src/app/pages/dashboard-user-pw/dashboard-user-pw.component.css */
+
+/* --- Base Styles for Dashboard Container --- */
 .user-dashboard-container {
-  padding: 100px 5% 20px; /* Ajuste para navbar fijo */
-  max-width: 100%; /* ¡AJUSTADO A 100% PARA QUE SE EXTIENDA MÁS! */
+  padding-top: calc(var(--navbar-height) + 20px);
+  padding-bottom: 20px;
+  padding-left: 3%;
+  padding-right: 3%;
+  max-width: 1200px;
   margin: 0 auto;
-  font-family: Arial, sans-serif;
-  color: #333;
+  color: var(--text-dark);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - var(--navbar-height) - var(--footer-height) - 40px);
 }
 
 h1 {
   text-align: center;
-  color: #472d30;
+  color: var(--primary-dark);
   margin-bottom: 30px;
-  font-size: 2.5em;
+  font-size: 2em;
+  font-weight: 700;
 }
 
 h2 {
-  color: #472d30;
+  text-align: center;
+  color: var(--primary-dark);
   margin-bottom: 20px;
-  font-size: 1.8em;
-  border-bottom: 2px solid #ffe1a8;
+  font-size: 1.4em;
+  border-bottom: 2px solid var(--accent-gold);
   padding-bottom: 5px;
+  font-weight: 600;
+  width: 100%;
 }
 
-/* Sección de Subida de Archivos */
-.upload-section {
-  background-color: #f9f9f9;
-  padding: 25px;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-  margin-bottom: 40px;
-  text-align: center;
-}
-
-.file-input-group {
+/* --- Grid Layout --- */
+.documents-grid {
   display: flex;
-  flex-wrap: wrap;
-  gap: 15px;
-  justify-content: center; /* Centra los elementos horizontalmente */
+  flex-direction: column;
+  gap: 30px;
+  width: 100%;
+  flex: 1;
+}
+
+/* --- Document Upload Panels (Carrusel) --- */
+.document-upload-panels {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--neutral-light-bg);
+  padding: 20px;
+  border-radius: var(--border-radius-card);
+  box-shadow: var(--shadow-base);
+  min-height: 700px;
+}
+
+.carousel-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 700px; /* AUMENTADO */
+  margin: 20px auto 0;
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  margin-bottom: 15px;
-  width: 100%; /* Asegura que el grupo ocupe todo el ancho disponible */
+  justify-content: center;
+  flex-grow: 1;
+  height: 100%;
 }
 
-.custom-file-upload {
-  background-color: #472d30; /* Color principal de tu marca */
-  color: white;
-  padding: 12px 25px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 1em;
-  font-weight: bold;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-  white-space: nowrap;
-  flex-grow: 1; /* ¡Permite que el botón se extienda! */
-  text-align: center;
-  max-width: none; /* ¡Elimina el max-width para permitir extensión! */
+.document-carousel-inner {
+  overflow: hidden;
+  width: 100%;
+  height: 700px; /* AUMENTADO */
+  position: relative;
 }
 
-.custom-file-upload:hover {
-  background-color: #3a2427;
-  transform: translateY(-2px);
+.carousel-item {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%; /* IGUAL PARA TODOS */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: opacity var(--transition-speed-base), transform var(--transition-speed-base);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(100%);
 }
 
-input[type="file"] {
-  display: none;
+.carousel-item.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(0);
+  position: relative;
 }
 
-.upload-button {
-  background-color: #ffe1a8;
-  color: #472d30;
+.carousel-item.leaving {
+  transform: translateX(-100%);
+}
+
+.carousel-nav-btn {
+  background-color: var(--primary-dark);
+  color: var(--accent-gold);
   border: none;
-  padding: 12px 25px;
-  border-radius: 5px;
+  border-radius: var(--border-radius-button-round);
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   cursor: pointer;
-  font-size: 1em;
+  font-size: 1.2em;
+  box-shadow: var(--shadow-base);
+  transition: background-color var(--transition-speed-fast), transform var(--transition-speed-fast);
+  z-index: 10;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.carousel-nav-btn:hover {
+  background-color: #3a2427;
+  transform: translateY(-50%) scale(1.08);
+}
+
+.carousel-nav-btn:active {
+  transform: translateY(-50%) scale(0.95);
+}
+
+.carousel-nav-btn.prev-btn { left: -20px; }
+.carousel-nav-btn.next-btn { right: -20px; }
+
+/* --- PDF Viewer --- */
+.pdf-viewer-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--neutral-light-bg);
+  padding: 20px;
+  border-radius: var(--border-radius-card);
+  box-shadow: var(--shadow-base);
+  min-height: 700px;
+  flex-grow: 1;
+}
+
+.pdf-viewer-container {
+  flex-grow: 1;
+  border: 2px solid var(--border-light);
+  border-radius: var(--border-radius-input);
+  overflow: hidden;
+  background-color: #e9ecef;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto 15px;
+  position: relative;
+  min-height: 450px;
+  width: 100%;
+  max-width: 600px;
+  height: 100%;
+}
+
+.pdf-iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.no-preview-placeholder {
+  text-align: center;
+  color: var(--text-light);
+  font-size: 1.1em;
+}
+.no-preview-placeholder i {
+  font-size: 3em;
+  margin-bottom: 10px;
+  color: #ccc;
+}
+
+.preview-file-name {
+  text-align: center;
+  font-size: 0.9em;
+  color: var(--text-medium);
+  margin-bottom: 15px;
+  font-style: italic;
+}
+
+/* --- Save Button --- */
+.save-button-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+.btn-save-all {
+  padding: 15px 25px;
+  background-color: var(--success-color);
+  color: var(--white);
+  border: none;
+  border-radius: var(--border-radius-button-round);
+  cursor: pointer;
+  font-size: 1.1em;
   font-weight: bold;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-  white-space: nowrap;
-  flex-grow: 1; /* ¡Permite que el botón se extienda! */
-  max-width: none; /* ¡Elimina el max-width para permitir extensión! */
+  transition: background-color var(--transition-speed-fast), transform var(--transition-speed-fast);
+  box-shadow: var(--shadow-button);
+  width: 100%;
+  max-width: 400px;
 }
 
-.upload-button:hover {
-  background-color: #f7d499;
-  transform: translateY(-2px);
+.btn-save-all:hover {
+  background-color: #218838;
+  transform: translateY(-3px);
 }
 
-.upload-button:disabled {
-  background-color: #e0e0e0;
-  color: #a0a0a0;
+.btn-save-all:disabled {
+  background-color: var(--border-light);
+  color: var(--text-light);
   cursor: not-allowed;
   transform: none;
 }
 
-.file-hint {
-  font-size: 0.9em;
-  color: #777;
-  margin-top: 10px;
-}
-
-/* Sección de Lista de Documentos (sin cambios significativos) */
-.documents-list-section {
-  background-color: #fff;
-  padding: 25px;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-}
-
-.documents-table-container {
-  overflow-x: auto;
-  border: 1px solid #eee;
-  border-radius: 8px;
-  box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
-}
-
-.documents-table {
+/* --- Estilo de carga de documentos --- */
+:host ::ng-deep .document-card {
   width: 100%;
-  border-collapse: collapse;
-  text-align: left;
+  height: 100%;
+  max-width: 600px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
 }
 
-.documents-table th, .documents-table td {
-  padding: 12px 15px;
-  border-bottom: 1px solid #eee;
-}
-
-.documents-table th {
-  background-color: #f8f8f8;
-  color: #555;
-  font-weight: bold;
-  text-transform: uppercase;
-  font-size: 0.9em;
-}
-
-.documents-table tbody tr:hover {
-  background-color: #f5f5f5;
-}
-
-.no-documents {
+:host ::ng-deep .custom-file-upload {
+  width: 100%;
+  height: 100%;
+  max-height: 100%;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   text-align: center;
-  padding: 20px;
-  color: #888;
-  font-style: italic;
-}
-
-/* Estilos para los botones de acción en la tabla */
-.doc-actions button {
-  padding: 6px 12px;
-  border: none;
-  border-radius: 4px;
   cursor: pointer;
-  font-size: 0.85em;
-  font-weight: bold;
-  margin-right: 8px;
-  transition: background-color 0.3s ease, opacity 0.3s ease;
-  background-color: #472d30;
-  color: white;
+  border: 2px dashed var(--border-medium);
+  border-radius: var(--border-radius-card);
+  padding: 20px;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+  background-color: var(--neutral-bg);
 }
 
-.doc-actions button:last-child {
-  margin-right: 0;
+:host ::ng-deep .custom-file-upload:hover {
+  border-color: var(--accent-gold);
+  background-color: var(--neutral-light-bg);
 }
 
-.doc-actions button.download {
-  background-color: #472d30;
+:host ::ng-deep .custom-file-upload .upload-icon {
+  font-size: 3em;
+  color: var(--text-light);
+  margin-bottom: 10px;
 }
 
-.doc-actions button.delete {
-  background-color: #dc3545;
+:host ::ng-deep .custom-file-upload .file-name {
+  font-size: 1.1em;
+  color: var(--text-dark);
+  font-weight: 500;
 }
 
-.doc-actions button:hover {
-  opacity: 0.9;
-  transform: translateY(-1px);
+:host ::ng-deep .custom-file-upload .instructions {
+  font-size: 0.9em;
+  color: var(--text-medium);
 }
 
-.doc-actions button.delete:hover {
-  background-color: #c9302c;
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .user-dashboard-container {
-    padding: 100px 3% 20px;
-  }
-  .file-input-group {
-    flex-direction: column;
+/* --- Responsive --- */
+@media (min-width: 992px) {
+  .documents-grid {
+    flex-direction: row;
     align-items: stretch;
-    gap: 10px; /* Reduce un poco el gap en móviles */
   }
-  .custom-file-upload, .upload-button {
-    max-width: 100%; /* Asegura que ocupen todo el ancho en móviles */
+  .document-upload-panels, .pdf-viewer-section {
+    flex: 1;
+    min-height: 700px;
   }
-  .documents-table th, .documents-table td {
-    padding: 8px 10px;
-    font-size: 0.8em;
+  .user-dashboard-container {
+    padding-top: calc(var(--navbar-height) + 30px);
+    padding-left: 5%;
+    padding-right: 5%;
+    padding-bottom: 30px;
   }
-  .doc-actions button {
-    padding: 4px 8px;
-    font-size: 0.75em;
-    margin-right: 5px;
+  h1 { font-size: 2.8em; }
+  h2 { font-size: 1.8em; }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  .document-upload-panels { max-width: none; min-height: 550px; }
+  .carousel-wrapper { max-width: 600px; } /* Aumentado proporcionalmente */
+  .document-carousel-inner { height: 600px; }
+  .pdf-viewer-section { min-height: 550px; }
+  .pdf-viewer-container { min-height: 350px; }
+}
+
+@media (max-width: 767px) {
+  .user-dashboard-container {
+    padding-top: calc(var(--navbar-height) + 15px);
+    padding-bottom: 15px;
   }
+  h1 { font-size: 1.8em; }
+  h2 { font-size: 1.3em; }
+  .card-actions button { font-size: 0.85em; padding: 7px 14px; }
+  .pdf-viewer-section { min-height: 400px; }
+  .btn-save-all { font-size: 1em; padding: 12px 20px; }
+  .carousel-nav-btn {
+    width: 30px;
+    height: 30px;
+    font-size: 1em;
+  }
+  .carousel-nav-btn.prev-btn { left: 0px; }
+  .carousel-nav-btn.next-btn { right: 0px; }
+  .save-button-container { margin-top: 20px; }
+
+  .document-upload-panels { min-height: 500px; }
+  .document-carousel-inner { height: 500px; }
+  .carousel-wrapper { max-width: 95%; }
+  .pdf-viewer-container { min-height: 250px; }
 }

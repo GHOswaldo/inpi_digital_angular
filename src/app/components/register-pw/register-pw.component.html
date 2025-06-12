@@ -1,21 +1,78 @@
-<div class="register-left-panel">
-  <div class="register-card-content">
+<!-- src/app/components/register-pw/register-pw.component.html -->
+
+<div class="register-container">
+  <div class="register-card">
     <h2>Registrarse</h2>
 
     <form (ngSubmit)="onSubmit()">
-      <label for="email">Correo electrónico:</label>
-      <input type="email" id="email" name="email" [(ngModel)]="email" required>
+      <!-- Email, Contraseña y Confirmar Contraseña (arriba) -->
+      <div class="form-group">
+        <label for="email">Correo electrónico:</label>
+        <input type="email" id="email" name="email" [(ngModel)]="email" required>
+      </div>
 
-      <label for="password">Contraseña:</label>
-      <input type="password" id="password" name="password" [(ngModel)]="password" required>
+      <div class="form-group">
+        <label for="password">Contraseña:</label>
+        <input type="password" id="password" name="password" [(ngModel)]="password" required>
+      </div>
 
-      <label for="confirmPassword">Confirmar contraseña:</label>
-      <input type="password" id="confirmPassword" name="confirmPassword" [(ngModel)]="confirmPassword" required>
+      <div class="form-group">
+        <label for="confirmPassword">Confirmar contraseña:</label>
+        <input type="password" id="confirmPassword" name="confirmPassword" [(ngModel)]="confirmPassword" required>
+      </div>
+      <!-- Fin de campos de credenciales -->
 
+      <hr class="form-divider"> <!-- Separador visual -->
+
+      <!-- Nombres y Apellidos (en la misma fila, igual ancho) -->
+      <div class="form-row two-columns">
+        <div class="form-group">
+          <label for="nombres">Nombre(s):</label>
+          <input type="text" id="nombres" name="nombres" [(ngModel)]="nombres" required>
+        </div>
+        <div class="form-group">
+          <label for="apellidos">Apellidos:</label>
+          <input type="text" id="apellidos" name="apellidos" [(ngModel)]="apellidos" required>
+        </div>
+      </div>
+
+      <!-- Teléfono (fila completa) -->
+      <div class="form-group">
+        <label for="telefono">Teléfono:</label>
+        <input type="tel" id="telefono" name="telefono" [(ngModel)]="telefono">
+      </div>
+
+      <!-- Estado/Provincia (combobox, ahora arriba de Ciudad) -->
+      <div class="form-group">
+        <label for="estado">Estado:</label>
+        <select id="estado" name="estado" [(ngModel)]="estado" class="custom-select">
+          <option value="" disabled>Selecciona un estado</option>
+          <option *ngFor="let state of mexicanStates" [value]="state">{{ state }}</option>
+        </select>
+      </div>
+
+      <!-- Ciudad (ahora debajo de Estado/Provincia) -->
+      <div class="form-group">
+        <label for="ciudad">Ciudad:</label>
+        <input type="text" id="ciudad" name="ciudad" [(ngModel)]="ciudad">
+      </div>
+
+      <!-- Código Postal y Fecha de Nacimiento (en la misma fila) -->
+      <div class="form-row two-columns">
+        <div class="form-group">
+          <label for="codigoPostal">Código postal:</label>
+          <input type="text" id="codigoPostal" name="codigoPostal" [(ngModel)]="codigoPostal" maxlength="5" pattern="\d{5}" title="El código postal debe ser de 5 dígitos numéricos">
+        </div>
+        <div class="form-group">
+          <label for="fechaNacimiento">Fecha de nacimiento:</label>
+          <input type="date" id="fechaNacimiento" name="fechaNacimiento" [(ngModel)]="fechaNacimiento" class="date-input">
+        </div>
+      </div>
+      
       <button type="submit">Registrar</button>
       <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
     </form>
 
-    <p class="login-link">¿Ya tienes cuenta? <a [routerLink]="['/login-pw']">Iniciar sesión</a></p>
+    <p class="login-link">¿Ya tienes cuenta? <a [routerLink]="['/home-pw']">Iniciar sesión</a></p>
   </div>
 </div>

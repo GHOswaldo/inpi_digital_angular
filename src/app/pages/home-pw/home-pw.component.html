@@ -10,16 +10,22 @@
     <p>
       Tu progreso es nuestro compromiso.
     </p>
-    <div class="button-group">
-      <a routerLink="/login-pw" class="btn-primary">Iniciar sesión</a>
+    
+    <!-- Este grupo de botones (Iniciar Sesión y Registrarse) solo se mostrará si NO hay un usuario autenticado. -->
+    <div class="button-group" *ngIf="(currentUser$ | async) === null">
+      <!-- CAMBIO CLAVE: Llama al nuevo método triggerLoginPanel() en lugar de openLoginPanel() -->
+      <a class="btn-primary" (click)="triggerLoginPanel()">Iniciar sesión</a>
       <a routerLink="/register-pw" class="btn-secondary">Registrarse</a>
     </div>
   </div>
 
   <div class="mission-statement">
-    <h2>Nuestra Misión</h2>
+    <h2>Nuestra misión</h2>
     <p>
-      "Garantizar el pleno ejercicio de los derechos de los pueblos indígenas y afromexicano, promoviendo su desarrollo integral con respeto a su cultura y autonomía."
+      "Garantizar el pleno ejercicio de los derechos de los pueblos indígenas y afromexicano, promoviendo su desarrollo integral con respeto a su cultura y autonomía".
     </p>
   </div>
 </div>
+
+<!-- ELIMINADO: app-login-pw ya no se incrusta aquí, ahora está en app.component.html -->
+<!-- <app-login-pw *ngIf="(currentUser$ | async) === null"></app-login-pw> -->

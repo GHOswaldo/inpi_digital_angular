@@ -1,130 +1,205 @@
 /* src/app/pages/generate-letter-admin-pw/generate-letter-admin-pw.component.css */
-.generate-letter-container {
-  padding: 100px 5% 20px; /* Ajuste para navbar fijo */
-  max-width: 900px; /* Un poco menos ancho que el dashboard para centrar el contenido */
-  margin: 0 auto;
-  font-family: Arial, sans-serif;
+
+.letter-generator-container {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  background-color: #f0f2f5;
+  min-height: calc(100vh - 85px);
+  font-family: 'Inter', sans-serif;
   color: #333;
+  gap: 30px;
 }
 
 h1 {
-  text-align: center;
   color: #472d30;
-  margin-bottom: 30px;
-  font-size: 2.5em;
-}
-
-.form-section {
   margin-bottom: 25px;
-  background-color: #f9f9f9;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  font-size: 2.5em;
+  text-align: center;
 }
 
-.form-section label {
-  display: block;
-  margin-bottom: 10px;
-  font-weight: bold;
-  color: #555;
+h2 {
+  color: #472d30;
+  margin-bottom: 20px;
+  font-size: 1.8em;
+  border-bottom: 2px solid #ffe1a8;
+  padding-bottom: 10px;
+  text-align: center;
 }
 
-.form-section select {
-  width: 100%;
-  padding: 10px 15px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 1em;
-  background-color: white;
-  appearance: none; /* Elimina estilos nativos de select */
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20256%20256%22%3E%3Cpath%20fill%3D%22%23444%22%20d%3D%22M205.2%2084.7l-77.2%2077.2c-4.7%204.7-12.3%204.7-17%200l-77.2-77.2c-4.7-4.7-4.7-12.3%200-17l17-17c4.7-4.7%2012.3-4.7%2017%200l68.7%2068.7c4.7%204.7%2012.3%204.7%2017%200l68.7-68.7c4.7-4.7%2012.3-4.7%2017%200l17%2017c4.7%204.7%204.7%2012.3%200%2017z%22%2F%3E%3C%2Fsvg%3E'); /* Icono de flecha SVG */
-  background-repeat: no-repeat;
-  background-position: right 15px center;
-  background-size: 1em;
-  cursor: pointer;
+.form-section, .preview-section {
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
-.action-buttons {
-  display: flex;
-  justify-content: center;
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 20px;
   margin-bottom: 30px;
 }
 
-.generate-button, .download-button {
-  background-color: #ffe1a8;
+.form-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.form-group label {
+  font-weight: bold;
   color: #472d30;
+  margin-bottom: 8px;
+  font-size: 1em;
+}
+
+.form-group input[type="number"],
+.form-group input[type="text"],
+.form-group select {
+  width: 100%;
+  padding: 10px 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1em;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: #ffe1a8;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255, 225, 168, 0.5);
+}
+
+.generate-pdf-btn {
+  background-color: #472d30;
+  color: white;
   border: none;
   padding: 12px 25px;
-  border-radius: 5px;
+  border-radius: 8px;
   cursor: pointer;
   font-size: 1.1em;
   font-weight: bold;
   transition: background-color 0.3s ease, transform 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 auto; /* Centrar el botón */
+  box-shadow: 0 4px 10px rgba(71, 45, 48, 0.2);
 }
 
-.generate-button:hover, .download-button:hover {
-  background-color: #f7d499;
-  transform: translateY(-2px);
+.generate-pdf-btn:hover {
+  background-color: #3a2427;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(71, 45, 48, 0.3);
 }
 
-.generate-button:disabled, .download-button:disabled {
-  background-color: #e0e0e0;
-  color: #a0a0a0;
-  cursor: not-allowed;
-  transform: none;
+.error-message {
+  color: #d9534f;
+  margin-top: 15px;
+  font-size: 0.9em;
+  background-color: #fdeded;
+  border: 1px solid #f0b0b0;
+  padding: 10px;
+  border-radius: 6px;
+  text-align: center;
 }
 
 .preview-section {
-  background-color: #f0f0f0;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 25px;
-  margin-top: 30px;
-  box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+  min-height: 400px; /* Altura mínima para la previsualización */
 }
 
-.preview-section h2 {
-  color: #472d30;
-  margin-top: 0;
-  margin-bottom: 15px;
-  font-size: 1.8em;
+/* --- MODIFICACIONES EN .letter-content (Más pequeñas y compactas) --- */
+.letter-content {
+  border: 1px solid #eee;
+  padding: 18px; /* Reducido el padding para dar más espacio al contenido */
+  min-height: 300px;
+  background-color: #fdfdfd;
+  line-height: 1.2; /* Más compacto, de 1.3 a 1.2 */
+  font-size: 0.75em; /* Más pequeño, de 0.8em a 0.75em */
+  color: #222;
+  box-shadow: inset 0 1px 5px rgba(0, 0, 0, 0.05);
+  overflow-y: auto;
+}
+
+.letter-content p {
+  margin-bottom: 0.3em; /* Reducido espacio entre párrafos */
+}
+/* --- FIN MODIFICACIONES --- */
+
+.letter-content .text-right {
+  text-align: right;
+}
+
+.letter-content .text-center {
   text-align: center;
 }
 
-.preview-section pre {
-  background-color: white;
-  border: 1px solid #e0e0e0;
-  padding: 20px;
-  border-radius: 5px;
-  white-space: pre-wrap; /* Mantiene saltos de línea y espacios */
-  font-family: monospace;
-  font-size: 0.95em;
-  line-height: 1.6;
-  color: #333;
-  min-height: 200px; /* Altura mínima para la vista previa */
-  overflow-y: auto; /* Permite scroll si el contenido es largo */
+.letter-content .strong {
+  font-weight: bold;
 }
 
-.note {
-  font-size: 0.9em;
-  color: #777;
+.letter-content .indent {
+  margin-left: 40px; /* Sangría para el monto en letras */
+}
+
+.letter-content .center-text-underline {
   text-align: center;
-  margin-top: 15px;
+  border-bottom: 1px solid #000; /* Subrayado para la figura */
+  display: inline-block; /* Para que el underline solo cubra el texto */
+  padding-bottom: 3px;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  min-width: 300px; /* Ancho mínimo para el subrayado */
+}
+
+.letter-content .note {
+  font-size: 0.7em; /* También se reduce la nota */
+  color: #555;
+  margin-top: 1em;
+  margin-bottom: 0.1em; /* Más compacto aún */
+}
+
+.letter-content .note-content {
+  font-size: 0.65em; /* Se reduce el contenido de la nota */
+  color: #666;
+  text-align: justify;
+  margin-bottom: 0.1em; /* Más compacto aún */
+}
+
+.placeholder-text {
+  text-align: center;
+  color: #888;
+  font-style: italic;
+  padding: 50px;
 }
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
-  .generate-letter-container {
-    padding: 100px 3% 20px;
+  .letter-generator-container {
+    padding: 15px;
   }
-  .action-buttons {
-    flex-direction: column;
-    gap: 15px;
+
+  h1 {
+    font-size: 2em;
   }
-  .generate-button, .download-button {
-    width: 100%;
+
+  h2 {
+    font-size: 1.5em;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr; /* Una columna en móviles */
+  }
+
+  .form-section, .preview-section {
+    padding: 20px;
+  }
+
+  .letter-content {
+    padding: 15px;
+    font-size: 0.8em; /* Ajuste para móviles también */
   }
 }

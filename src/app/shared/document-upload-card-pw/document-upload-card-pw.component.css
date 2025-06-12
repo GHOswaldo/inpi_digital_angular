@@ -1,0 +1,205 @@
+/* src/app/shared/document-upload-card-pw/document-upload-card-pw.component.css */
+
+.document-card {
+  background-color: #f7f7f7;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Para empujar las acciones abajo */
+  height: 250px; /* Altura fija para que las tarjetas se vean uniformes */
+  margin: 10px; /* Margen para separación en el grid */
+  transition: all 0.3s ease;
+  overflow: hidden; /* Ocultar contenido extra si la altura es fija */
+  position: relative; /* Para el posicionamiento de elementos internos */
+}
+
+.document-card.drag-over {
+  border-color: #007bff;
+  box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
+  background-color: #e6f7ff;
+}
+
+.document-card h3 {
+  color: #333;
+  font-size: 1.2rem;
+  margin-bottom: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.required-tag {
+  background-color: #dc3545; /* Rojo */
+  color: white;
+  font-size: 0.75rem;
+  padding: 3px 6px;
+  border-radius: 4px;
+  margin-left: 8px;
+  font-weight: normal;
+}
+
+.upload-area {
+  flex-grow: 1; /* Permite que el área de subida ocupe el espacio disponible */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.custom-file-upload {
+  border: 2px dashed #007bff;
+  color: #007bff;
+  background-color: #e9f7ff;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  display: inline-block;
+  text-align: center;
+  width: 80%; /* Ajustar el ancho del área de subida */
+  box-sizing: border-box;
+  transition: all 0.2s ease;
+}
+
+.custom-file-upload:hover {
+  background-color: #d1efff;
+  border-color: #0056b3;
+}
+
+.custom-file-upload input[type="file"] {
+  display: none;
+}
+
+.upload-area .fa-cloud-upload-alt {
+  margin-right: 8px;
+}
+
+.file-name {
+  margin-top: 10px;
+  font-size: 0.95rem;
+  color: #555;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  word-break: break-all; /* Para nombres de archivo largos */
+  padding: 0 10px;
+}
+
+.file-name .fa-file-pdf {
+  margin-right: 8px;
+  color: #dc3545; /* Rojo para icono PDF */
+}
+
+.status-icon {
+  margin-left: 10px;
+  font-size: 1.1rem;
+}
+
+.uploaded-icon {
+  color: #28a745; /* Verde */
+}
+
+.selected-icon {
+  color: #ffc107; /* Amarillo/Naranja */
+}
+
+.error-icon {
+  color: #dc3545; /* Rojo */
+}
+
+.uploading-icon {
+  color: #007bff; /* Azul */
+}
+
+.progress-bar-container {
+  width: 90%;
+  background-color: #e0e0e0;
+  border-radius: 5px;
+  margin-top: 10px;
+  overflow: hidden;
+  height: 10px;
+  position: relative;
+}
+
+.progress-bar {
+  height: 100%;
+  background-color: #007bff;
+  border-radius: 5px;
+  text-align: center;
+  line-height: 10px;
+  color: white;
+  transition: width 0.3s ease;
+}
+
+.progress-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 0.7rem;
+  color: #333; /* Color oscuro para que se vea sobre la barra */
+}
+
+.error-message {
+  color: #dc3545;
+  font-size: 0.85rem;
+  margin-top: 10px;
+}
+
+.card-actions {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  padding-top: 15px; /* Espacio entre el área de subida y los botones */
+  border-top: 1px dashed #eee; /* Separador */
+  box-sizing: border-box;
+}
+
+.card-actions button {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  flex-grow: 1; /* Distribuir espacio */
+  margin: 0 5px; /* Margen entre botones */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-actions button i {
+  margin-right: 5px;
+}
+
+.preview-button {
+  background-color: #007bff; /* Azul */
+  color: white;
+}
+
+.preview-button:hover {
+  background-color: #0056b3;
+  transform: translateY(-2px);
+}
+
+.remove-button {
+  background-color: #f0ad4e; /* Naranja/Advertencia */
+  color: white;
+}
+
+.remove-button:hover {
+  background-color: #ec971f;
+  transform: translateY(-2px);
+}
+
+.remove-button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+  transform: none;
+}

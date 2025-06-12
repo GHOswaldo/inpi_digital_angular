@@ -36,6 +36,16 @@ export class AcercaDePwComponent {
       id: 'q4',
       titulo: 'Nuestra misión',
       contenido: 'Ser el eje de las políticas públicas para garantizar el reconocimiento, protección y desarrollo de los pueblos indígenas y afromexicano, promoviendo su participación plena y efectiva en la vida nacional.'
+    },
+    {
+      id: 'q5', // Nueva tarjeta
+      titulo: 'Nuestros principios',
+      contenido: 'Nos regimos por la interculturalidad, el respeto a la libre determinación, la participación plena y efectiva, la justicia social y el desarrollo con identidad. Estos pilares guían cada una de nuestras acciones en favor de los pueblos.'
+    },
+    {
+      id: 'q6', // Nueva tarjeta
+      titulo: 'Visión a futuro',
+      contenido: 'Aspiramos a un México donde los derechos de los pueblos indígenas y afromexicano sean plenamente ejercidos, sus culturas florezcan y su autonomía se fortalezca, contribuyendo activamente a una sociedad más justa, equitativa e incluyente.'
     }
   ];
 }

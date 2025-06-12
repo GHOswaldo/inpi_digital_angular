@@ -1,116 +1,242 @@
 /* src/app/components/register-pw/register-pw.component.css */
 
-.register-left-panel {
-  width: 100%;
-  height: 100%;
-  box-sizing: border-box;
-
+/* Contenedor principal del formulario de registro - Estilos base para móviles (Mobile-First) */
+.register-container {
   display: flex;
   justify-content: center;
   align-items: center;
-
-  padding: 10px; /* ¡Reduce el padding para que el contenido sea más ancho! */
-  /* Puedes incluso probar con padding: 0; si quieres que la tarjeta
-     se ajuste a los bordes del 'main' (que ya tiene sus propios paddings) */
-  background-color: #f7f7f2;
-}
-
-/* src/app/components/register-pw/register-pw.component.css */
-
-.register-card-content {
-  background-color: #fff;
-  padding: 40px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  max-width: 800px; /* ¡Cambia este valor al ancho deseado! */
-  width: 100%; /* Asegura que ocupe todo el ancho disponible hasta el max-width */
-  text-align: center;
+  min-height: calc(100vh - 70px); /* Ajusta para la altura de la navbar en móvil */
+  padding: 20px 15px; /* Padding general para móviles */
   box-sizing: border-box;
+  font-family: 'Inter', sans-serif; /* Usar Inter como fuente */
+  background-color: #f0f2f5; /* Fondo suave para el contenedor */
 }
 
-/* El resto de tus estilos permanecen igual */
-/* El resto de tus estilos para h2, form, input, button, etc., deben permanecer como están */
-/* Asegúrate de que los selectores para elementos internos sean correctos (ej. .register-card-content h2) */
+.register-card {
+  background-color: #fff;
+  padding: 30px; /* Padding más compacto */
+  border-radius: 12px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  width: 100%; /* Ocupa todo el ancho disponible */
+  max-width: 400px; /* Ancho máximo para el formulario en móvil (se anulará en desktop) */
+  text-align: center;
+}
 
-.register-card-content h2 {
-  font-size: 28px;
+.register-card h2 {
   color: #472d30;
+  font-size: 2em; /* Tamaño de fuente más pequeño para móvil */
   margin-bottom: 25px;
 }
 
-#register-icon { /* Si tienes este ID en tu HTML, asegúrate de que sea único */
-  font-size: 60px;
-  color: #472d30;
-  margin-bottom: 20px;
-}
-
-/* src/app/components/register-pw/register-pw.component.css */
-
-.register-card-content form {
+.register-card form {
   display: flex;
   flex-direction: column;
-  width: 100%;
-  max-width: 500px; /* ¡Ajusta este también si quieres campos más anchos! */
-  margin: 0 auto;
+  gap: 15px; /* Espacio más compacto entre elementos del formulario */
 }
 
-.register-card-content label {
-  margin-bottom: 8px;
-  font-weight: bold;
-  font-size: 18px;
-  color: #472d30;
+/* Separador visual */
+.form-divider {
+  border: 0;
+  height: 1px;
+  background-image: linear-gradient(to right, rgba(0, 0, 0, 0), #ccc, rgba(0, 0, 0, 0));
+  margin: 20px 0;
+}
+
+/* Estilos para agrupar campos */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Alinear etiquetas a la izquierda */
+  width: 100%;
+}
+
+.form-row {
+  display: flex;
+  flex-direction: column; /* Por defecto en columna para móviles */
+  gap: 15px; /* Espacio entre los grupos de campos dentro de la fila */
+}
+
+.register-card label {
   text-align: left;
+  font-weight: bold;
+  color: #472d30;
+  font-size: 1em; /* Tamaño de fuente para etiquetas */
+  margin-bottom: 5px; /* Pequeño margen debajo de la etiqueta */
 }
 
-.register-card-content input {
-  margin-bottom: 18px;
-  padding: 12px;
-  font-size: 16px;
+.register-card input[type="email"],
+.register-card input[type="password"],
+.register-card input[type="text"],
+.register-card input[type="tel"],
+.register-card input[type="date"],
+.register-card select { /* Estilos para el combobox */
+  width: 100%;
+  padding: 10px 15px;
   border: 2px solid #472d30;
-  border-radius: 5px;
-  width: 100%;
+  border-radius: 8px;
+  font-size: 1em;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
   box-sizing: border-box;
+  color: #333;
+  background-color: #fdfdff; /* Fondo ligeramente diferente para inputs */
 }
 
-.register-card-content button[type="submit"] {
-  width: 100%;
-  padding: 12px;
-  font-size: 18px;
+.register-card input:focus,
+.register-card select:focus {
+  border-color: #ffe1a8;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255, 225, 168, 0.5);
+}
+
+/* Estilo específico para input type="date" */
+.register-card input[type="date"].date-input {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-color: #fdfdff;
+  position: relative;
+}
+
+.register-card button[type="submit"] {
   background-color: #472d30;
   color: white;
-  border: 2px solid #472d30;
-  border-radius: 50px;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 8px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  font-size: 1.1em;
+  font-weight: bold;
+  transition: background-color 0.3s ease, transform 0.2s ease;
   margin-top: 10px;
+  width: 100%;
+  box-shadow: 0 4px 10px rgba(71, 45, 48, 0.2);
 }
 
-.register-card-content button[type="submit"]:hover {
-  background-color: #ffe1a8;
-  color: #472d30;
+.register-card button[type="submit"]:hover {
+  background-color: #3a2427;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(71, 45, 48, 0.3);
 }
 
-.register-card-content .error-message {
+.register-card .error-message {
   color: #d9534f;
-  text-align: center;
   margin-top: 15px;
-  font-size: 14px;
-  font-weight: bold;
+  font-size: 0.9em;
+  background-color: #fdeded;
+  border: 1px solid #f0b0b0;
+  padding: 10px;
+  border-radius: 6px;
 }
 
-.register-card-content .login-link {
+.register-card .login-link {
   margin-top: 20px;
-  font-size: 14px;
-  color: #472d30;
+  font-size: 0.9em;
+  color: #555;
 }
 
-.register-card-content .login-link a {
+.register-card .login-link a {
   color: #472d30;
-  font-weight: bold;
   text-decoration: none;
+  font-weight: bold;
 }
 
-.register-card-content .login-link a:hover {
+.register-card .login-link a:hover {
   text-decoration: underline;
+}
+
+/* Media query para pantallas medianas (tablets y desktops) */
+@media (min-width: 768px) {
+  .register-container {
+    min-height: calc(100vh - 85px);
+    padding: 40px;
+  }
+
+  .register-card {
+    padding: 40px;
+    max-width: 900px;
+  }
+
+  .register-card h2 {
+    font-size: 2.2em;
+    margin-bottom: 30px;
+  }
+
+  .register-card form {
+    display: grid;
+    /* Grid de dos columnas para todo el formulario en desktop */
+    grid-template-columns: 1fr 1fr; 
+    gap: 20px 30px; /* Espacio vertical y horizontal */
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  /* Campos que deben ocupar todo el ancho (Email, Teléfono, Dirección, Ciudad, Estado, Botón, Mensajes, Enlace de Login) */
+  /* Reajustado para que email, password y confirmPassword también ocupen solo 1fr */
+  .form-group:has(#email),
+  .form-group:has(#telefono),
+  .form-group:has(#direccion),
+  .form-group:has(#ciudad),
+  .form-group:has(#estado), /* Estado/Provincia también ocupa una columna */
+  .register-card button[type="submit"],
+  .register-card .error-message,
+  .register-card .login-link {
+    grid-column: 1 / -1; /* Ocupa ambas columnas */
+  }
+
+  /* Contraseña y Confirmar Contraseña (uno al lado del otro) */
+  .form-group:has(#password),
+  .form-group:has(#confirmPassword) {
+    grid-column: span 1; /* Ocupan una columna cada uno */
+  }
+
+  /* La línea divisoria ahora ocupa ambas columnas */
+  .form-divider {
+    grid-column: 1 / -1; /* Ocupa ambas columnas */
+  }
+
+  /* Los form-row (Nombres/Apellidos, CodigoPostal/FechaNacimiento) deben ocupar 2 columnas */
+  .form-row.two-columns {
+    grid-column: 1 / -1; /* Ocupa ambas columnas del grid principal */
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Divide la fila en dos columnas de igual ancho */
+    gap: 20px 30px;
+  }
+
+  /* Ajuste para Código Postal y Fecha de Nacimiento: ocupan su mitad en la fila de dos columnas */
+  .form-row.two-columns .form-group:has(#codigoPostal) {
+    grid-column: 1 / 2;
+  }
+
+  .form-row.two-columns .form-group:has(#fechaNacimiento) {
+    grid-column: 2 / 3;
+  }
+
+  /* El resto de estilos de tamaño de fuente y padding se mantienen */
+  .register-card label {
+    font-size: 1.1em;
+  }
+
+  .register-card input[type="email"],
+  .register-card input[type="password"],
+  .register-card input[type="text"],
+  .register-card input[type="tel"],
+  .register-card input[type="date"],
+  .register-card select {
+    padding: 12px 18px;
+    font-size: 1.1em;
+  }
+
+  .register-card button[type="submit"] {
+    padding: 15px 30px;
+    font-size: 1.2em;
+    margin-top: 20px;
+  }
+
+  .register-card .error-message {
+    font-size: 1em;
+  }
+
+  .register-card .login-link {
+    font-size: 1em;
+  }
 }

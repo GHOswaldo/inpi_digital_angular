@@ -1,24 +1,42 @@
-<header class="header">
-  <div class="logo" id="reset-main">
-    <a routerLink="/"><img src="img.png" alt="Logo de la marca"></a> </div>
-  <nav>
-    <ul class="nav-links">
-      <li><a routerLink="/programas-pw">Programas</a></li>
-      <li><a routerLink="/acerca-de-pw">Acerca de</a></li>
-      <li><a routerLink="/ayuda-pw">Ayuda</a></li>
+<!-- src/app/core/navbar-pw/navbar-pw.component.html -->
 
-      <ng-container *ngIf="(userRole$ | async) as userProfile">
+<header class="header">
+  <a routerLink="/home-pw" class="logo">
+    <img src="img.png" alt="Logo de la Plataforma">
+  </a>
+
+  <!-- El botón de hamburguesa se mantiene para móviles, directamente en el header -->
+  <button class="menu-toggle" (click)="toggleMenu()">
+    <i class="fas fa-bars" *ngIf="!isMenuOpen"></i> <!-- Icono de hamburguesa cuando el menú está cerrado -->
+    <i class="fas fa-times" *ngIf="isMenuOpen"></i> <!-- Icono de 'X' cuando el menú está abierto -->
+  </button>
+
+  <!-- Contenedor de navegación. La clase 'open' se añade/quita dinámicamente para mostrar/ocultar el menú. -->
+  <!-- En desktop, este 'nav' completo se alineará a la derecha. -->
+  <nav [class.open]="isMenuOpen">
+    <ul class="nav-links">
+      <!-- Enlaces generales de la aplicación -->
+      <li><a routerLink="/home-pw" (click)="toggleMenu()">Inicio</a></li>
+      <li><a routerLink="/programas-pw" (click)="toggleMenu()">Programas</a></li>
+      <li><a routerLink="/acerca-de-pw" (click)="toggleMenu()">Acerca de</a></li>
+      <li><a routerLink="/ayuda-pw" (click)="toggleMenu()">Ayuda</a></li>
+
+      <!-- Contenedor para enlaces específicos de roles -->
+      <ng-container *ngIf="(userProfile$ | async) as userProfile">
+        <!-- Enlaces para el rol 'admin' -->
         <ng-container *ngIf="userProfile && userProfile.role === 'admin'">
-          <li><a routerLink="/dashboard-admin-pw">Gestión de becarios</a></li>
-          <li><a routerLink="/generate-letter-admin-pw">Carta modelo</a></li>
+          <li><a routerLink="/dashboard-admin-pw" (click)="toggleMenu()">Gestión de becarios</a></li>
+          <li><a routerLink="/generate-letter-admin-pw" (click)="toggleMenu()">Carta modelo</a></li>
         </ng-container>
 
+        <!-- Enlaces para el rol 'cliente' -->
         <ng-container *ngIf="userProfile && userProfile.role === 'cliente'">
-          <li><a routerLink="/dashboard-user-pw">Documentación</a></li>
-          <li><a routerLink="/edit-profile-user-pw">Información personal</a></li>
+          <li><a routerLink="/dashboard-user-pw" (click)="toggleMenu()">Documentación</a></li>
+          <li><a routerLink="/edit-profile-user-pw" (click)="toggleMenu()">Información personal</a></li>
         </ng-container>
       </ng-container>
 
+      <!-- Botón de Cerrar Sesión, visible solo si hay un usuario autenticado -->
       <li *ngIf="authService.currentUser$ | async">
         <button class="logout-button" (click)="onLogout()">Cerrar sesión</button>
       </li>

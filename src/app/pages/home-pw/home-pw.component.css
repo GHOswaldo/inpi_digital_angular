@@ -1,19 +1,21 @@
 /* src/app/pages/home-pw/home-pw.component.css */
+
+/* Estilos base para móviles (Mobile-First) */
 .home-container {
-  padding: 100px 5% 40px; /* Ajuste para navbar y footer */
-  max-width: 900px; /* Un ancho razonable para el contenido */
+  padding: 80px 3% 30px; /* Ajuste para navbar y footer, padding lateral más pequeño */
+  max-width: 900px; /* Ancho máximo para el contenido */
   margin: 0 auto;
   font-family: Arial, sans-serif;
   color: #333;
   text-align: center;
   display: flex;
   flex-direction: column;
-  gap: 40px; /* Espacio entre secciones */
+  gap: 30px; /* Espacio entre secciones más compacto */
 }
 
 .welcome-card {
   background-color: #fff;
-  padding: 40px;
+  padding: 30px; /* Padding más compacto */
   border-radius: 12px;
   box-shadow: 0 6px 20px rgba(0,0,0,0.1);
   text-align: center;
@@ -21,38 +23,43 @@
 
 .welcome-card h1 {
   color: #472d30;
-  font-size: 2.8em;
-  margin-bottom: 25px;
+  font-size: 1.8em; /* Tamaño de fuente más pequeño para móviles */
+  margin-bottom: 20px;
 }
 
 .welcome-card p {
-  font-size: 1.15em;
-  line-height: 1.7;
-  margin-bottom: 20px;
+  font-size: 0.95em; /* Tamaño de fuente más pequeño */
+  line-height: 1.6;
+  margin-bottom: 15px;
   color: #555;
 }
 
 .button-group {
-  margin-top: 30px;
+  margin-top: 20px;
   display: flex;
+  flex-direction: column; /* Botones apilados en móvil */
+  gap: 15px; /* Espacio entre botones */
   justify-content: center;
-  gap: 20px;
+  align-items: center; /* Alinea los elementos si son más pequeños que el contenedor */
 }
 
 .btn-primary, .btn-secondary {
   display: inline-block;
-  padding: 15px 30px;
+  padding: 12px 25px; /* Padding más pequeño para botones */
   border-radius: 8px;
   text-decoration: none;
   font-weight: bold;
-  font-size: 1.1em;
+  font-size: 1em; /* Tamaño de fuente más pequeño */
   transition: background-color 0.3s ease, transform 0.2s ease;
+  width: 100%; /* Ocupa todo el ancho disponible */
+  max-width: 250px; /* Limitar el ancho de los botones individuales en móvil */
 }
 
 .btn-primary {
-  background-color: #472d30; /* Color principal de tu marca */
+  background-color: #472d30;
   color: white;
   border: 2px solid #472d30;
+  cursor: pointer; /* ¡CAMBIO CLAVE AQUÍ! */
 }
 
 .btn-primary:hover {
@@ -61,9 +68,10 @@
 }
 
 .btn-secondary {
-  background-color: #ffe1a8; /* Color secundario de tu marca */
+  background-color: #ffe1a8;
   color: #472d30;
   border: 2px solid #ffe1a8;
+  cursor: pointer; /* Agregado también para el botón secundario por consistencia */
 }
 
 .btn-secondary:hover {
@@ -73,51 +81,55 @@
 
 .mission-statement {
   background-color: #f0f0f0;
-  padding: 30px;
+  padding: 25px; /* Padding más pequeño */
   border-radius: 12px;
   box-shadow: 0 4px 15px rgba(0,0,0,0.08);
 }
 
 .mission-statement h2 {
   color: #472d30;
-  font-size: 2.2em;
-  margin-bottom: 15px;
+  font-size: 1.6em; /* Tamaño de fuente más pequeño para móvil */
+  margin-bottom: 10px;
 }
 
 .mission-statement p {
   font-style: italic;
-  font-size: 1.1em;
+  font-size: 0.9em; /* Tamaño de fuente más pequeño */
   color: #666;
-  line-height: 1.6;
+  line-height: 1.5;
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
+/* Media query para pantallas medianas (tablets y desktops pequeños) */
+@media (min-width: 768px) {
   .home-container {
-    padding: 100px 3% 30px;
+    padding: 100px 5% 40px; /* Vuelve al padding original */
+    gap: 40px; /* Vuelve al espacio original entre secciones */
   }
   .welcome-card {
-    padding: 30px;
+    padding: 40px; /* Vuelve al padding original */
   }
   .welcome-card h1 {
-    font-size: 2em;
+    font-size: 2.8em; /* Vuelve al tamaño de fuente original */
   }
   .welcome-card p {
-    font-size: 1em;
+    font-size: 1.15em; /* Vuelve al tamaño de fuente original */
   }
   .button-group {
-    flex-direction: column;
-    gap: 15px;
+    flex-direction: row; /* Botones en fila */
+    gap: 20px; /* Vuelve al espacio original entre botones */
+    justify-content: center; /* Centra los botones horizontalmente */
+    align-items: center; /* Asegura que los elementos se centren verticalmente en el contenedor flex */
   }
   .btn-primary, .btn-secondary {
-    width: 100%;
-    font-size: 1em;
-    padding: 12px 25px;
+    width: auto; /* Ancho automático */
+    font-size: 1.1em; /* Vuelve al tamaño de fuente original */
+    padding: 15px 30px; /* Vuelve al padding original */
+    max-width: none; /* Eliminar el max-width en desktop */
   }
   .mission-statement h2 {
-    font-size: 1.8em;
+    font-size: 2.2em; /* Vuelve al tamaño de fuente original */
   }
   .mission-statement p {
-    font-size: 1em;
+    font-size: 1.1em; /* Vuelve al tamaño de fuente original */
   }
 }

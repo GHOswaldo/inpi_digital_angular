@@ -168,7 +168,7 @@ input[type="file"] {
   background-color: #472d30;
   color: white;
 }
-
+ 
 .save-button:hover {
   background-color: #3a2427;
   transform: translateY(-2px);

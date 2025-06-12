@@ -11,7 +11,7 @@ interface Programa {
 }
 
 @Component({
-  selector: 'app-programs-pw',
+  selector: 'app-programas-pw',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './programas-pw.component.html',

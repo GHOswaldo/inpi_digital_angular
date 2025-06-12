@@ -1,83 +1,195 @@
 /* src/app/core/navbar-pw/navbar-pw.component.css */
 
-/* Header / Navbar */
+/* Header / Navbar - Estilos base para móviles (Mobile-First) */
 .header {
   background-color: #472d30;
   display: flex;
-  justify-content: flex-end; /* Alinea los elementos al final (derecha) */
+  justify-content: space-between; /* Alinea logo a la izquierda y menú/botón a la derecha en móvil */
   align-items: center;
-  height: 85px; /* Tu altura de navbar confirmada */
-  padding: 5px 10%;
-  position: fixed; /* Asegura que se fije en la parte superior */
+  height: 70px; /* Altura más compacta para móviles */
+  padding: 5px 3%; /* Padding lateral más pequeño */
+  position: fixed;
   top: 0;
   width: 100%;
-  z-index: 1000; /* Asegura que esté por encima de todo */
-  box-sizing: border-box; /* Incluye padding en el ancho */
+  z-index: 1000;
+  box-sizing: border-box;
 }
 
 .header .logo {
   cursor: pointer;
-  margin-right: auto; /* Empuja el logo a la izquierda */
 }
 
 .header .logo img {
-  height: 70px;
+  height: 55px; /* Altura del logo más pequeña para móviles */
   width: auto;
   transition: all 0.3s;
 }
 
 .header .logo img:hover {
-  transform: scale(1.2);
+  transform: scale(1.1); /* Ligeramente más pequeño el hover para móvil */
 }
 
+/* Eliminado: .header-right-group {} */
+/* Eliminado: .welcome-bubble {} */
+
+
 .header nav {
-  display: flex; /* Añade flexbox a la etiqueta nav */
-  align-items: center; /* Alinea los elementos de la nav verticalmente */
+  display: none; /* Oculta la navegación principal por defecto en móviles */
+  flex-direction: column; /* Para cuando se muestre como menú hamburguesa */
+  position: absolute; /* Posiciona el menú desplegable */
+  top: 70px; /* Debajo de la navbar */
+  left: 0;
+  width: 100%;
+  background-color: #472d30; /* Mismo color de fondo */
+  padding: 10px 0;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 999; /* Debajo de la navbar pero encima del contenido */
+}
+
+/* Clase para mostrar la navegación en móvil */
+.header nav.open {
+  display: flex; /* Muestra el menú cuando tiene la clase 'open' */
 }
 
 .header .nav-links {
   list-style: none;
-  margin: 0; /* Elimina el margen predeterminado de la lista */
-  padding: 0; /* Elimina el padding predeterminado de la lista */
-  display: flex; /* Usa flexbox para alinear los ítems de la lista */
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column; /* Elementos en columna para móvil */
   align-items: center;
+  width: 100%;
 }
 
 .header .nav-links li {
-  padding: 0 20px;
-  transition: transform 0.3s;
+  padding: 10px 0; /* Padding vertical para ítems en móvil */
+  width: 100%;
+  text-align: center;
+  transition: background-color 0.3s;
 }
 
 .header .nav-links li:hover {
-  transform: scale(1.1);
+  background-color: #3a2427; /* Fondo sutil al pasar el mouse en móvil */
+  transform: none; /* Quitamos la transformación de hover para evitar duplicados */
 }
 
 .header .nav-links a {
   font-weight: 700;
   color: #eceff1;
   text-decoration: none;
-  white-space: nowrap; /* Evita que los enlaces se rompan en varias líneas */
+  white-space: nowrap;
+  display: block; /* Asegura que el enlace ocupe todo el ancho del li */
+  padding: 5px 0; /* Un poco de padding dentro del enlace para facilitar el toque */
 }
 
 .header .nav-links li a:hover {
   color: #ffe1a8;
 }
 
-/* Estilo para el botón de cerrar sesión */
+/* Estilo para el botón de cerrar sesión en móvil */
 .logout-button {
-  background-color: #d9534f; /* Rojo distintivo para cerrar sesión */
+  background-color: #d9534f;
   color: white;
   border: none;
-  padding: 9px 25px; /* Ajustado para que sea similar a otros botones */
-  border-radius: 50px; /* Borde más redondeado como tu .btn button */
+  padding: 8px 20px; /* Ajustado para móvil */
+  border-radius: 50px;
   cursor: pointer;
-  font-size: 16px; /* Ajustado para ser consistente */
-  font-weight: 700; /* Ajustado para ser consistente */
+  font-size: 14px; /* Tamaño de fuente más pequeño para móvil */
+  font-weight: 700;
   transition: all 0.3s ease;
-  white-space: nowrap; /* Evita que el texto del botón se rompa */
+  white-space: nowrap;
+  margin-top: 10px; /* Margen superior cuando está en el menú desplegable */
 }
 
 .logout-button:hover {
-  background-color: #c9302c; /* Rojo más oscuro al pasar el mouse */
-  transform: scale(1.1); /* Consistente con otros hover */
+  background-color: #c9302c;
+  transform: scale(1.05); /* Ligeramente más pequeño el hover para móvil */
+}
+
+/* Botón de hamburguesa */
+.menu-toggle {
+  display: block; /* Muestra el botón de hamburguesa en móvil */
+  background: none;
+  border: none;
+  font-size: 30px;
+  color: #ffe1a8;
+  cursor: pointer;
+  padding: 5px;
+}
+
+/* Media query para pantallas medianas (tablets y desktops) */
+@media (min-width: 768px) {
+  .header {
+    height: 85px; /* Vuelve a la altura original de la navbar */
+    padding: 5px 10%; /* Vuelve al padding original para un buen espaciado */
+    justify-content: space-between; /* Mantiene logo a la izquierda y nav a la derecha */
+  }
+
+  .header .logo {
+    /* Para mover el logo un poco más a la izquierda en PC */
+    margin-left: -20px; /* CAMBIO CLAVE: Valor negativo empuja el logo hacia el borde izquierdo */
+    /* Ajusta -20px a un valor más pequeño o más grande según cuánto lo quieras mover. */
+  }
+
+  .header .logo img {
+    height: 70px; /* Vuelve a la altura original del logo */
+  }
+
+  .header .logo img:hover {
+    transform: scale(1.2); /* Vuelve al hover original */
+  }
+
+  .header nav {
+    display: flex; /* Muestra la navegación principal en desktop */
+    position: static; /* Quita el posicionamiento absoluto */
+    flex-direction: row; /* Vuelve a elementos en fila */
+    width: auto; /* Ancho automático */
+    background-color: transparent; /* Fondo transparente */
+    padding: 0;
+    box-shadow: none;
+  }
+
+  .header .nav-links {
+    flex-direction: row; /* Vuelve a elementos en fila */
+    margin-left: auto; /* Empuja los enlaces a la derecha dentro de la nav */
+  }
+
+  .header .nav-links li {
+    padding: 0 15px; /* Reduce el padding horizontal para dar más espacio a los enlaces */
+    width: auto;
+    text-align: left;
+  }
+
+  .header .nav-links li:hover {
+    transform: scale(1.1); /* Vuelve a la transformación de hover original */
+    background-color: transparent; /* No hay fondo al pasar el mouse */
+  }
+
+  .header .nav-links a {
+    padding: 0; /* Quita el padding vertical de los enlaces */
+  }
+
+  .logout-button {
+    background-color: #d9534f;
+    color: white;
+    border: none;
+    padding: 9px 20px;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 700;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    margin-top: 0;
+    margin-left: 15px; /* Ajusta este margen también para ser consistente con el padding */
+  }
+
+  .logout-button:hover {
+    background-color: #c9302c;
+    transform: scale(1.1);
+  }
+
+  .menu-toggle {
+    display: none; /* Oculta el botón de hamburguesa en desktop */
+  }
 }

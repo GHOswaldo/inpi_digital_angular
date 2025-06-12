@@ -30,7 +30,9 @@
               "@angular/material/prebuilt-themes/magenta-violet.css",
               "src/styles.css"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/html2pdf.js/dist/html2pdf.bundle.min.js"
+            ]
           },
           "configurations": {
             "production": {
@@ -95,7 +97,9 @@
               "@angular/material/prebuilt-themes/magenta-violet.css",
               "src/styles.css"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/html2pdf.js/dist/html2pdf.bundle.min.js"
+            ]
           }
         }
       }

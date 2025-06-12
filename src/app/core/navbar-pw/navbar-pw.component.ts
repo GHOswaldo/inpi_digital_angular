@@ -1,34 +1,29 @@
 // src/app/core/navbar-pw/navbar-pw.component.ts
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common'; // Necesitas CommonModule para *ngIf
-import { RouterLink } from '@angular/router'; // Necesitas RouterLink para los enlaces routerLink
-import { AuthService, UserProfile } from '../../services/auth.service'; // Importa AuthService y UserProfile
-import { Observable } from 'rxjs'; // Importa Observable
-import { switchMap } from 'rxjs/operators'; // Importa switchMap
+import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
+import { AuthService, UserProfile } from '../../services/auth.service';
+import { Observable } from 'rxjs';
+import { switchMap, map } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-navbar-pw', // Asegúrate de que el selector sea este
+  selector: 'app-navbar-pw',
   standalone: true,
-  imports: [RouterLink, CommonModule], // Importa RouterLink y CommonModule
+  imports: [RouterLink, CommonModule],
   templateUrl: './navbar-pw.component.html',
   styleUrls: ['./navbar-pw.component.css']
 })
 export class NavbarPwComponent {
-  // Propiedad para almacenar el perfil del usuario (incluido el rol)
-  userRole$: Observable<UserProfile | null>;
+  userProfile$: Observable<UserProfile | null>;
+  isMenuOpen: boolean = false;
+  // Eliminamos userName$ de aquí, ya que la burbuja se mueve a AppComponent
 
-  constructor(public authService: AuthService) { // Hacemos authService público para usarlo en el HTML (*ngIf)
-    // Escucha el cambio del usuario autenticado para obtener su rol
-    this.userRole$ = this.authService.currentUser$.pipe(
-      // Utiliza switchMap para pasar del Observable<User> de Firebase Auth
-      // al Observable<UserProfile> de Firestore.
-      // Si no hay usuario logueado (user es null), emitimos null para el userProfile.
+  constructor(public authService: AuthService) {
+    this.userProfile$ = this.authService.currentUser$.pipe(
       switchMap(user => {
         if (user && user.uid) {
-          return this.authService.getUserRole(user.uid);
+          return this.authService.getUserProfile(user.uid);
         } else {
-          // Si no hay usuario, emitir un Observable que inmediatamente emite null
-          // Esto es importante para que el pipe async funcione correctamente
           return new Observable<UserProfile | null>(observer => {
             observer.next(null);
             observer.complete();
@@ -36,14 +31,22 @@ export class NavbarPwComponent {
         }
       })
     );
+    // userName$ ya no se inicializa aquí
   }
 
-  // Método para cerrar sesión, llamado desde el botón en el HTML
+  /**
+   * Alterna el estado de apertura/cierre del menú de navegación en móviles.
+   */
+  toggleMenu(): void {
+    this.isMenuOpen = !this.isMenuOpen;
+  }
+
+  // Método para cerrar sesión
   onLogout(): void {
     this.authService.logout().subscribe({
       next: () => {
         console.log('Sesión cerrada exitosamente');
-        // La redirección al login-pw ya la maneja el AuthService en el tap()
+        this.isMenuOpen = false; // Cerrar el menú hamburguesa
       },
       error: (err) => {
         console.error('Error al cerrar sesión:', err);

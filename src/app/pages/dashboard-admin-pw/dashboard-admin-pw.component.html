@@ -1,3 +1,5 @@
+<!-- src/app/pages/dashboard-admin-pw/dashboard-admin-pw.component.html -->
+
 <div class="dashboard-container">
   <h1>Gestión de becarios</h1>
 
@@ -7,46 +9,200 @@
         type="text"
         [(ngModel)]="searchTerm"
         (input)="onSearch()"
-        placeholder="Buscar por nombre, email o estado..."
+        placeholder="Buscar por nombre, apellido, email o UID..."
       />
-      <button (click)="onSearch()" class="search-button">Buscar</button>
     </div>
-    <button (click)="onAddBecario()" class="add-button">Añadir nuevo becario</button>
   </div>
 
   <div class="becarios-table-container">
     <table class="becarios-table">
       <thead>
         <tr>
-          <th>ID</th>
-          <th>Nombre completo</th>
+          <th>Foto</th>
+          <th>Nombre(s)</th>
+          <th>Apellidos</th>
           <th>Correo electrónico</th>
-          <th>Estado</th>
+          <th>Estado Becario</th>
           <th>Acciones</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngIf="filteredBecarios.length === 0">
-          <td colspan="5" class="no-results">No se encontraron becarios.</td>
+          <td colspan="6" class="no-results">No se encontraron becarios o no hay becarios registrados.</td>
         </tr>
-        <tr *ngFor="let becario of filteredBecarios">
-          <td>{{ becario.id }}</td>
-          <td>{{ becario.nombre }}</td>
-          <td>{{ becario.email }}</td>
-          <td [ngClass]="{
-            'status-active': becario.estado === 'Activo',
-            'status-pending': becario.estado === 'Pendiente',
-            'status-inactive': becario.estado === 'Inactivo'
-          }">
-            {{ becario.estado }}
+        <tr *ngFor="let becario of filteredBecarios; trackBy: trackByUid">
+          <td>
+            <img 
+              [src]="becario.fotoUrl || 'https://placehold.co/40x40/adb5bd/ffffff?text=PF'" 
+              [alt]="'Foto de ' + (becario.nombres || '') + ' ' + (becario.apellidos || '')"
+              class="profile-thumbnail"
+              (error)="onImageError($event)"
+            >
           </td>
-          <td class="actions">
-            <button (click)="onViewDocuments(becario.id)" class="action-button view">Ver Documentos</button>
-            <button (click)="onEditBecario(becario.id)" class="action-button edit">Editar</button>
-            <button (click)="onDeleteBecario(becario.id)" class="action-button delete">Eliminar</button>
+          <td>{{ becario.nombres || 'No especificado' }}</td>
+          <td>{{ becario.apellidos || 'No especificado' }}</td>
+          <td>{{ becario.email }}</td>
+          <td
+            [ngClass]="{
+              'status-active': becario.estadoBecario === 'Activo',
+              'status-pending': becario.estadoBecario === 'Pendiente',
+              'status-inactive': becario.estadoBecario === 'Inactivo'
+            }"
+          >
+            {{ becario.estadoBecario || 'No especificado' }}
+          </td>
+          <td class="actions-cell">
+            <button class="action-button view-info" (click)="viewInternInfo(becario)">
+              <i class="fas fa-info-circle"></i> Ver información
+            </button>
+            <button class="action-button view-docs" (click)="viewInternDocuments(becario)">
+              <i class="fas fa-file-alt"></i> Ver documentos
+            </button>
+            <button class="action-button send-email" (click)="sendEmail(becario.email)">
+              <i class="fas fa-envelope"></i>
+            </button>
           </td>
         </tr>
       </tbody>
     </table>
+  </div>
+
+  <!-- Panel Modal para Ver Información o Documentos -->
+  <div class="details-panel-overlay" *ngIf="showDetailsPanel">
+    <div class="details-panel">
+      <button class="close-details-button" (click)="closeDetailsPanel()">
+        <i class="fas fa-times-circle"></i>
+      </button>
+
+      <!-- Panel de Información del Becario -->
+      <ng-container *ngIf="panelMode === 'info' && selectedBecario">
+        <h2>Información del Becario: {{ selectedBecario.nombres }} {{ selectedBecario.apellidos }}</h2>
+        <div class="info-section">
+          <p><strong>UID:</strong> {{ selectedBecario.uid }}</p>
+          <p><strong>Correo:</strong> {{ selectedBecario.email }}</p>
+          <p><strong>Rol:</strong> {{ selectedBecario.role }}</p>
+          
+          <!-- Nuevo contenedor para el grid de edición -->
+          <div class="form-grid"> 
+            <div class="form-group">
+              <label for="nombres">Nombres:</label>
+              <input type="text" id="nombres" [(ngModel)]="selectedBecario.nombres">
+            </div>
+            <div class="form-group">
+              <label for="apellidos">Apellidos:</label>
+              <input type="text" id="apellidos" [(ngModel)]="selectedBecario.apellidos">
+            </div>
+            
+            <div class="form-group">
+              <label for="telefono">Teléfono:</label>
+              <input type="tel" id="telefono" [(ngModel)]="selectedBecario.telefono">
+            </div>
+            <div class="form-group">
+              <label for="fechaNacimiento">Fecha de Nacimiento:</label>
+              <input type="date" id="fechaNacimiento" [(ngModel)]="selectedBecario.fechaNacimiento">
+            </div>
+
+            <div class="form-group">
+              <label for="direccion">Dirección:</label>
+              <input type="text" id="direccion" [(ngModel)]="selectedBecario.direccion">
+            </div>
+            <div class="form-group">
+              <label for="codigoPostal">Código Postal:</label>
+              <input type="text" id="codigoPostal" [(ngModel)]="selectedBecario.codigoPostal" maxlength="5" pattern="\d{5}">
+            </div>
+
+            <div class="form-group">
+              <label for="estadoAdmin">Estado/Provincia:</label>
+              <select id="estadoAdmin" [(ngModel)]="selectedBecario.estado">
+                <option value="" disabled>Selecciona un estado</option>
+                <option *ngFor="let state of mexicanStates" [value]="state">{{ state }}</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="ciudad">Ciudad:</label>
+              <input type="text" id="ciudad" [(ngModel)]="selectedBecario.ciudad">
+            </div>
+
+            <!-- Campos existentes -->
+            <div class="form-group">
+              <label for="estadoBecario">Estado del Becario:</label>
+              <select id="estadoBecario" [(ngModel)]="selectedBecario.estadoBecario">
+                <option value="Activo">Activo</option>
+                <option value="Pendiente">Pendiente</option>
+                <option value="Inactivo">Inactivo</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="programaApoyo">Programa de Apoyo:</label>
+              <input type="text" id="programaApoyo" [(ngModel)]="selectedBecario.programaApoyo">
+            </div>
+          </div>
+          <!-- Fin de form-grid -->
+
+          <!-- Botón para guardar los cambios del perfil -->
+          <button class="btn-save-profile" (click)="saveInternInfo()">
+            <i class="fas fa-save"></i> Guardar cambios
+          </button>
+        </div>
+      </ng-container>
+
+      <!-- Panel de Documentos del Becario (sin cambios aquí) -->
+      <ng-container *ngIf="panelMode === 'documents' && selectedBecario">
+        <h2>Documentos de {{ selectedBecario.displayName }}</h2>
+        <div class="documents-panel-content">
+          <section class="document-upload-panels">
+            <h3>Documentos requeridos</h3>
+            <div class="carousel-wrapper">
+              <button class="carousel-nav-btn prev-btn" (click)="prevDocumentAdmin()">
+                <i class="fas fa-chevron-left"></i>
+              </button>
+
+              <div class="document-carousel-inner">
+                <div class="carousel-item"
+                     *ngFor="let docType of documentTypes; let i = index"
+                     [ngClass]="{ 'active': isActiveAdmin(i) }">
+
+                  <app-document-upload-card-pw
+                    [documentName]="docType"
+                    [isRequired]="true"
+                    [currentFileStatus]="documents[docType].status"
+                    [currentFileName]="documents[docType].file?.name"
+                    [uploadProgress]="documents[docType].uploadProgress"
+                    [errorMessage]="documents[docType].errorMessage"
+                    (fileSelected)="onFileChangeAdmin($event)"
+                    (previewRequested)="onPreviewRequestAdmin($event)"
+                    (fileRemoved)="onFileRemovedAdmin($event)"
+                  ></app-document-upload-card-pw>
+
+                </div>
+              </div>
+
+              <button class="carousel-nav-btn next-btn" (click)="nextDocumentAdmin()">
+                <i class="fas fa-chevron-right"></i>
+              </button>
+            </div>
+          </section>
+
+          <section class="pdf-viewer-section">
+            <h3>Vista previa del documento</h3>
+            <div class="pdf-viewer-container">
+              <ng-container *ngIf="currentPreviewUrl; else noPreviewTemplateDocs">
+                <iframe [src]="currentPreviewUrl" class="pdf-iframe" frameborder="0"></iframe>
+              </ng-container>
+              <ng-template #noPreviewTemplateDocs>
+                <div class="no-preview-placeholder">
+                  <i class="fas fa-file-pdf"></i>
+                  <p>Selecciona un documento para previsualizarlo aquí.</p>
+                </div>
+              </ng-template>
+            </div>
+            <p class="preview-file-name">{{ currentPreviewFileName || 'Ningún documento seleccionado' }}</p>
+            <button class="btn-save-all" [disabled]="!canSaveExpedientAdmin()" (click)="saveExpedientAdmin()">
+              <i class="fas fa-save"></i> Guardar cambios
+            </button>
+          </section>
+        </div>
+      </ng-container>
+    </div>
   </div>
 </div>
