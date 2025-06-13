@@ -188,17 +188,16 @@ h2 {
   font-style: italic;
 }
 
-/* --- Save Button --- */
 .save-button-container {
   width: 100%;
   display: flex;
-  justify-content: center;
+  justify-content: center; /* Ensures the button itself is centered */
   margin-top: 30px;
 }
 
 .btn-save-all {
   padding: 15px 25px;
-  background-color: var(--success-color);
+  background-color: #472d30;
   color: var(--white);
   border: none;
   border-radius: var(--border-radius-button-round);
@@ -207,12 +206,13 @@ h2 {
   font-weight: bold;
   transition: background-color var(--transition-speed-fast), transform var(--transition-speed-fast);
   box-shadow: var(--shadow-button);
-  width: 100%;
-  max-width: 400px;
+  width: 100%; /* Allows the button to take full available width */
+  max-width: 400px; /* Limits the button's maximum width */
+  margin: 0 auto; /* This will center the button if its width is less than 100% of its parent */
 }
 
 .btn-save-all:hover {
-  background-color: #218838;
+  background-color: #3a2427;
   transform: translateY(-3px);
 }
 

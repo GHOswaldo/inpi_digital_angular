@@ -1,19 +1,45 @@
+// src/app/pages/dashboard-admin-pw/dashboard-admin-pw.component.ts
+
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 // Firebase imports
 import { initializeApp, FirebaseApp, getApps, getApp } from 'firebase/app';
 import { getAuth, Auth, User, onAuthStateChanged } from 'firebase/auth';
-// Importar QuerySnapshot y DocumentChange para tipado correcto
-import { getFirestore, collection, query, where, onSnapshot, Firestore, doc, setDoc, getDocs, QuerySnapshot, DocumentChange } from 'firebase/firestore'; 
+import { 
+  getFirestore, 
+  collection, 
+  query, 
+  where, 
+  onSnapshot, 
+  Firestore, 
+  doc, 
+  setDoc, 
+  getDocs, 
+  QuerySnapshot, 
+  DocumentChange, 
+  orderBy, 
+  limit, 
+  updateDoc, 
+  deleteDoc,
+  writeBatch // <--- ¡Asegúrate de que esta línea esté presente!
+} from 'firebase/firestore'; 
 import { getStorage, ref, uploadBytesResumable, getDownloadURL, deleteObject, FirebaseStorage } from 'firebase/storage';
 import { getFunctions, httpsCallable, Functions } from 'firebase/functions';
-
-
-import { UserProfile } from '../../services/auth.service'; // Asegúrate de que esta interfaz es correcta y accesible
+import { UserProfile } from '../../services/auth.service';
 import { DocumentUploadCardPwComponent } from '../../shared/document-upload-card-pw/document-upload-card-pw.component';
+
+// Interfaz para Notificaciones
+export interface Notification {
+  id: string;
+  message: string;
+  timestamp: Date;
+  read: boolean;
+  type: 'info' | 'warning' | 'error' | 'success'; // Puedes expandir los tipos
+  userId?: string; // Para identificar a qué usuario se le envió la notificación (si aplica)
+}
 
 interface DocumentState {
   name: string;
@@ -37,7 +63,8 @@ declare const __initial_auth_token: string | undefined;
   imports: [
     CommonModule,
     FormsModule,
-    DocumentUploadCardPwComponent
+    DocumentUploadCardPwComponent,
+    DatePipe // Añadir DatePipe aquí 
   ],
   templateUrl: './dashboard-admin-pw.component.html',
   styleUrl: './dashboard-admin-pw.component.css'
@@ -78,13 +105,17 @@ export class DashboardAdminPwComponent implements OnInit, OnDestroy {
   currentPreviewFileName: string | null = null;
   currentDocumentIndex: number = 0;
 
+  // Nuevas propiedades para notificaciones 
+  notifications: Notification[] = [];
+  showNotificationsPanel: boolean = false;
+  unreadNotificationsCount: number = 0;
+
   constructor(private sanitizer: DomSanitizer) { }
 
   async ngOnInit(): Promise<void> {
     try {
       const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
       const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
-
       if (getApps().length === 0) {
         this.app = initializeApp(firebaseConfig);
         console.log('Firebase app initialized in admin dashboard.');
@@ -99,30 +130,28 @@ export class DashboardAdminPwComponent implements OnInit, OnDestroy {
       this.functions = getFunctions(this.app);
 
       await this.fetchMexicanStates();
-
-      if (this.auth) { // Asegurarse de que 'this.auth' no sea null
+      if (this.auth) {
         onAuthStateChanged(this.auth, async (user) => {
           if (user) {
             this.adminUserId = user.uid;
             this.isAuthReady = true;
             console.log('Admin authenticated. UID:', this.adminUserId);
             this.loadBecarios();
+            this.listenForNotifications(); // Iniciar escucha de notificaciones 
           } else {
             this.adminUserId = null;
             this.isAuthReady = true;
             console.warn('No admin user authenticated. Access to admin dashboard restricted.');
-            this.showMessageBox('Acceso no autorizado. Por favor, inicie sesión como administrador.'); // Reemplazado alert
+            this.showMessageBox('Acceso no autorizado. Por favor, inicie sesión como administrador.');
           }
         });
       } else {
         console.error('Firebase Auth service is null. Cannot set up auth listener.');
-        this.showMessageBox('Error crítico: El servicio de autenticación de Firebase no se inicializó correctamente.'); // Reemplazado alert
+        this.showMessageBox('Error crítico: El servicio de autenticación de Firebase no se inicializó correctamente.');
       }
-
-
-    } catch (error: any) { // Tipado 'error: any'
+    } catch (error: any) {
       console.error('Error crítico al inicializar Firebase en dashboard-admin-pw:', error);
-      this.showMessageBox('Error crítico: No se pudo inicializar la aplicación de administración.'); // Reemplazado alert
+      this.showMessageBox('Error crítico: No se pudo inicializar la aplicación de administración.');
     }
   }
 
@@ -139,7 +168,7 @@ export class DashboardAdminPwComponent implements OnInit, OnDestroy {
       const querySnapshot = await getDocs(collection(this.db, 'estadosMex'));
       this.mexicanStates = querySnapshot.docs.map(doc => doc.data()['nombre'] as string).sort();
       console.log('Estados de México cargados en Admin Dashboard:', this.mexicanStates);
-    } catch (error: any) { // Tipado 'error: any'
+    } catch (error: any) {
       console.error('fetchMexicanStates Error: Failed to retrieve Mexican states from Firestore in Admin Dashboard:', error);
     }
   }
@@ -152,7 +181,6 @@ export class DashboardAdminPwComponent implements OnInit, OnDestroy {
 
     const usersCollectionRef = collection(this.db, 'users');
     const q = query(usersCollectionRef, where('role', '==', 'cliente'));
-
     const unsubscribe = onSnapshot(q, (snapshot: QuerySnapshot) => {
       this.allBecarios = snapshot.docs.map(doc => {
         const data = doc.data() as UserProfile;
@@ -174,13 +202,153 @@ export class DashboardAdminPwComponent implements OnInit, OnDestroy {
       });
       console.log('Becarios cargados desde Firestore:', this.allBecarios);
       this.onSearch();
-    }, (error: any) => { // Tipado 'error: any'
+    }, (error: any) => {
       console.error('Error al escuchar becarios:', error);
-      this.showMessageBox('Error al cargar la lista de becarios. Por favor, intenta de nuevo más tarde.'); // Reemplazado alert
+      this.showMessageBox('Error al cargar la lista de becarios. Por favor, intenta de nuevo más tarde.');
     });
 
     this.unsubscribeListeners.push(unsubscribe);
   }
+
+  // --- Lógica de Notificaciones --- 
+  private listenForNotifications(): void {
+    if (!this.db || !this.adminUserId) {
+      console.warn('Firestore o Admin User ID no disponible para escuchar notificaciones.');
+      return;
+    }
+
+    // Escucha notificaciones destinadas al admin (o notificaciones generales) 
+    const notificationsRef = collection(this.db, 'notifications');
+    // Filtrar por 'admin' como destinatario, o si no tienen userId (generales) 
+    const q = query(
+      notificationsRef,
+      where('targetRole', '==', 'admin'), // Asegúrate de que tus notificaciones tienen un campo 'targetRole' 
+      orderBy('timestamp', 'desc'),
+      limit(20) // Limitar el número de notificaciones cargadas 
+    );
+
+    const unsubscribe = onSnapshot(q, (snapshot: QuerySnapshot) => {
+      snapshot.docChanges().forEach((change: DocumentChange) => {
+        const data = change.doc.data();
+        const notification: Notification = {
+          id: change.doc.id,
+          message: data['message'],
+          timestamp: data['timestamp']?.toDate ? data['timestamp'].toDate() : new Date(data['timestamp']), // Convertir Timestamp a Date 
+          read: data['read'] || false,
+          type: data['type'] || 'info', // Default a 'info' si no está especificado 
+          userId: data['userId'] || undefined
+        };
+
+        if (change.type === 'added') {
+          // Añadir al principio para que las más nuevas aparezcan arriba 
+          this.notifications.unshift(notification);
+        } else if (change.type === 'modified') {
+          const index = this.notifications.findIndex(n => n.id === notification.id);
+          if (index > -1) {
+            this.notifications[index] = notification;
+          }
+        } else if (change.type === 'removed') {
+          this.notifications = this.notifications.filter(n => n.id !== notification.id);
+        }
+      });
+      this.updateUnreadCount();
+      // Ordenar las notificaciones por fecha de forma descendente (más nuevas primero) 
+      this.notifications.sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
+      console.log('Notificaciones actualizadas:', this.notifications);
+    }, (error: any) => {
+      console.error('Error al escuchar notificaciones:', error);
+      this.showMessageBox('Error al cargar las notificaciones.');
+    });
+
+    this.unsubscribeListeners.push(unsubscribe);
+  }
+
+  updateUnreadCount(): void {
+    this.unreadNotificationsCount = this.notifications.filter(n => !n.read).length;
+  }
+
+  toggleNotificationsPanel(): void {
+    this.showNotificationsPanel = !this.showNotificationsPanel;
+  }
+
+  async markNotificationAsRead(notification: Notification): Promise<void> {
+    if (this.db && !notification.read) {
+      try {
+        const notificationRef = doc(this.db, `notifications/${notification.id}`);
+        await updateDoc(notificationRef, { read: true });
+        console.log(`Notificación ${notification.id} marcada como leída.`);
+        // No es necesario actualizar el array local directamente si onSnapshot está activo,
+        // ya que la actualización de Firestore disparará el listener. 
+      } catch (error: any) {
+        console.error('Error al marcar notificación como leída:', error);
+        this.showMessageBox('Error al marcar notificación como leída.');
+      }
+    }
+  }
+
+  async markAllAsRead(): Promise<void> {
+    if (this.db && this.notifications.length > 0) {
+      try {
+        const batch = writeBatch(this.db); // Usar batch para múltiples actualizaciones 
+        this.notifications.filter(n => !n.read).forEach(notification => {
+          const notificationRef = doc(this.db!, `notifications/${notification.id}`);
+          batch.update(notificationRef, { read: true });
+        });
+        await batch.commit();
+        console.log('Todas las notificaciones marcadas como leídas.');
+      } catch (error: any) {
+        console.error('Error al marcar todas las notificaciones como leídas:', error);
+        this.showMessageBox('Error al marcar todas las notificaciones como leídas.');
+      }
+    }
+  }
+
+  async deleteNotification(notificationId: string, event?: Event): Promise<void> {
+    if (event) {
+      event.stopPropagation(); // Evitar que el clic en el botón marque la notificación como leída 
+    }
+    if (this.db) {
+      try {
+        await deleteDoc(doc(this.db, `notifications/${notificationId}`));
+        console.log(`Notificación ${notificationId} eliminada.`);
+        // El onSnapshot se encargará de actualizar this.notifications 
+      } catch (error: any) {
+        console.error('Error al eliminar notificación:', error);
+        this.showMessageBox('Error al eliminar notificación.');
+      }
+    }
+  }
+
+  async deleteReadNotifications(): Promise<void> {
+    if (this.db && this.notifications.length > 0) {
+      const readNotifications = this.notifications.filter(n => n.read);
+      if (readNotifications.length === 0) {
+        this.showMessageBox('No hay notificaciones leídas para borrar.');
+        return;
+      }
+
+      try {
+        const batch = writeBatch(this.db); // Usar batch para múltiples eliminaciones 
+        readNotifications.forEach(notification => {
+          batch.delete(doc(this.db!, `notifications/${notification.id}`));
+        });
+        await batch.commit();
+        console.log('Notificaciones leídas eliminadas.');
+      } catch (error: any) {
+        console.error('Error al eliminar notificaciones leídas:', error);
+        this.showMessageBox('Error al eliminar notificaciones leídas.');
+      }
+    }
+  }
+
+  hasReadNotifications(): boolean {
+    return this.notifications.some(n => n.read);
+  }
+
+  trackNotificationById(index: number, notification: Notification): string {
+    return notification.id;
+  }
+  // --- Fin Lógica de Notificaciones ---
 
   onSearch(): void {
     if (!this.searchTerm) {
@@ -209,7 +377,7 @@ export class DashboardAdminPwComponent implements OnInit, OnDestroy {
   }
 
   viewInternInfo(becario: UserProfile): void {
-    this.selectedBecario = { ...becario }; 
+    this.selectedBecario = { ...becario };
     this.panelMode = 'info';
     this.showDetailsPanel = true;
     console.log('Ver información del becario:', this.selectedBecario);
@@ -218,7 +386,7 @@ export class DashboardAdminPwComponent implements OnInit, OnDestroy {
   async saveInternInfo(): Promise<void> {
     if (!this.db || !this.selectedBecario) {
       console.error('Firestore o becario seleccionado no disponible para guardar.');
-      this.showMessageBox('Error: No se pudo guardar la información.'); // Reemplazado alert
+      this.showMessageBox('Error: No se pudo guardar la información.');
       return;
     }
     try {
@@ -226,7 +394,6 @@ export class DashboardAdminPwComponent implements OnInit, OnDestroy {
       const newDisplayName = (this.selectedBecario.nombres && this.selectedBecario.apellidos)
         ? `${this.selectedBecario.nombres} ${this.selectedBecario.apellidos}`
         : this.selectedBecario.displayName;
-
       await setDoc(userRef, {
         displayName: newDisplayName,
         nombres: this.selectedBecario.nombres,
@@ -241,13 +408,12 @@ export class DashboardAdminPwComponent implements OnInit, OnDestroy {
         programaApoyo: this.selectedBecario.programaApoyo,
         fotoUrl: this.selectedBecario.fotoUrl
       }, { merge: true });
-
       console.log('Información del becario actualizada:', this.selectedBecario.uid);
-      this.showMessageBox('Información del becario guardada con éxito.'); // Reemplazado alert
+      this.showMessageBox('Información del becario guardada con éxito.');
       this.closeDetailsPanel();
-    } catch (error: any) { // Tipado 'error: any'
+    } catch (error: any) {
       console.error('Error al guardar la información del becario:', error);
-      this.showMessageBox(`Error al guardar la información: ${error.message}`); // Reemplazado alert
+      this.showMessageBox(`Error al guardar la información: ${error.message}`);
     }
   }
 
@@ -295,7 +461,6 @@ export class DashboardAdminPwComponent implements OnInit, OnDestroy {
 
     // Referencia a la subcolección 'documentos' del becario específico
     const becarioDocsCollectionRef = collection(this.db, `users/${this.selectedBecario.uid}/documentos`);
-
     // Utiliza onSnapshot con la referencia a la subcolección
     const unsubscribe = onSnapshot(becarioDocsCollectionRef, (snapshot: QuerySnapshot) => {
       snapshot.docChanges().forEach((change: DocumentChange) => {
@@ -321,9 +486,9 @@ export class DashboardAdminPwComponent implements OnInit, OnDestroy {
       });
       console.log('Documentos del becario seleccionado cargados/actualizados:', this.documents);
       this.updatePreviewForCurrentDocumentAdmin();
-    }, (error: any) => { // Tipado 'error: any'
+    }, (error: any) => {
       console.error('Error al escuchar documentos del becario seleccionado:', error);
-      this.showMessageBox('Error al cargar los documentos del becario. Por favor, intenta de nuevo más tarde.'); // Reemplazado alert
+      this.showMessageBox('Error al cargar los documentos del becario. Por favor, intenta de nuevo más tarde.');
     });
 
     this.unsubscribeListeners.push(unsubscribe);
@@ -335,7 +500,7 @@ export class DashboardAdminPwComponent implements OnInit, OnDestroy {
       const body = encodeURIComponent(`Estimado becario,\n\nHemos revisado tu expediente. Por favor, ponte en contacto con nosotros para discutir algunos detalles.\n\nSaludos,\nEquipo de Becas`);
       window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
     } else {
-      this.showMessageBox('Correo electrónico del becario no disponible.'); // Reemplazado alert
+      this.showMessageBox('Correo electrónico del becario no disponible.');
     }
   }
 
@@ -354,7 +519,6 @@ export class DashboardAdminPwComponent implements OnInit, OnDestroy {
   updatePreviewForCurrentDocumentAdmin(): void {
     const currentDocName = this.documentTypes[this.currentDocumentIndex];
     const currentDocState = this.documents[currentDocName];
-
     if (currentDocState) {
       if (currentDocState.file && currentDocState.status === 'selected') {
         this.onPreviewRequestAdmin({ documentName: currentDocName, file: currentDocState.file });
@@ -375,7 +539,6 @@ export class DashboardAdminPwComponent implements OnInit, OnDestroy {
     if (doc) {
       doc.file = event.file;
       doc.errorMessage = undefined;
-
       if (event.file) {
         doc.status = 'selected';
         doc.url = this.sanitizer.bypassSecurityTrustResourceUrl(URL.createObjectURL(event.file));
@@ -393,11 +556,10 @@ export class DashboardAdminPwComponent implements OnInit, OnDestroy {
 
   onPreviewRequestAdmin(event: { documentName: string, file: File | null }): void {
     const docState = this.documents[event.documentName];
-
     if (event.file && docState.status === 'selected') {
       this.currentPreviewFileName = event.file.name;
       this.currentPreviewUrl = this.sanitizer.bypassSecurityTrustResourceUrl(URL.createObjectURL(event.file));
-    } else if (docState && docState.url) { // Usar docState.url que ya es SafeResourceUrl
+    } else if (docState && docState.url) {
       this.currentPreviewFileName = docState.name + (docState.firestoreUrl ? " (Desde la nube)" : "");
       this.currentPreviewUrl = docState.url;
     } else {
@@ -431,19 +593,15 @@ export class DashboardAdminPwComponent implements OnInit, OnDestroy {
 
     const docState = this.documents[docName];
     if (!docState) return;
-
     docState.isUploading = true;
-    docState.status = 'uploading'; // O un estado 'deleting' si lo creamos
+    docState.status = 'uploading';
     docState.errorMessage = undefined;
-
     try {
       const url = new URL(downloadUrl);
       const encodedPath = url.pathname.split('/o/')[1];
       const filePath = decodeURIComponent(encodedPath.split('?')[0]);
-
       const deleteCallable = httpsCallable(this.functions, 'deleteUserDocument');
       const result = await deleteCallable({ filePath: filePath, becarioId: becarioId });
-
       console.log('Resultado de la Cloud Function:', result.data);
 
       docState.file = null;
@@ -454,14 +612,14 @@ export class DashboardAdminPwComponent implements OnInit, OnDestroy {
       docState.uploadProgress = 0;
 
       this.updatePreviewForCurrentDocumentAdmin();
-      this.showMessageBox(`Documento "${docName}" eliminado con éxito para ${this.selectedBecario?.displayName}.`); // Reemplazado alert
-    } catch (error: any) { // Tipado 'error: any'
+      this.showMessageBox(`Documento "${docName}" eliminado con éxito para ${this.selectedBecario?.displayName}.`);
+    } catch (error: any) {
       console.error(`Error al llamar a Cloud Function para eliminar "${docName}" para ${this.selectedBecario?.uid}:`, error);
       docState.status = 'error';
       docState.errorMessage = `Error al eliminar el archivo: ${error.message}`;
       docState.isUploading = false;
       const errorMessage = error.code ? `(${error.code}) ${error.message}` : error.message;
-      this.showMessageBox(`Error al eliminar el documento "${docName}" para ${this.selectedBecario?.displayName}: ${errorMessage}. Revisa la consola para más detalles.`); // Reemplazado alert
+      this.showMessageBox(`Error al eliminar el documento "${docName}" para ${this.selectedBecario?.displayName}: ${errorMessage}. Revisa la consola para más detalles.`);
     }
   }
 
@@ -474,25 +632,30 @@ export class DashboardAdminPwComponent implements OnInit, OnDestroy {
     const allDocumentsUploaded = this.documentTypes.every(docName => this.documents[docName].status === 'uploaded');
     const hasUploadingFiles = this.documentTypes.some(docName => this.documents[docName].status === 'uploading');
     const hasErrorInFiles = this.documentTypes.some(docName => this.documents[docName].status === 'error');
-
     return (hasSelectedFiles || allDocumentsUploaded) && !hasUploadingFiles && !hasErrorInFiles;
   }
 
   async saveExpedientAdmin(): Promise<void> {
     console.log('>>> saveExpedientAdmin() ha sido llamado. <<<');
 
+     // CONSOLE.LOGS DE DEPURACIÓN CRUCIALES
+    console.log('----------------------------------------------------');
+    console.log('Estado de Autenticación Ready:', this.isAuthReady);
+    console.log('UID del Administrador logueado (adminUserId):', this.adminUserId);
+    console.log('UID del Becario seleccionado (selectedBecario.uid):', this.selectedBecario?.uid);
+    console.log('----------------------------------------------------');
+
     if (!this.db || !this.storage || !this.selectedBecario?.uid) {
       console.error('Servicios de Firebase no inicializados o UID del becario no disponible.');
-      this.showMessageBox('Error: Servicios de Firebase no disponibles.'); // Reemplazado alert
+      this.showMessageBox('Error: Servicios de Firebase no disponibles.');
       return;
     }
 
+
     console.log(`Intentando guardar expediente completo para el becario: ${this.selectedBecario.uid}...`);
     const uploadPromises: Promise<void>[] = [];
-
     for (const docName of this.documentTypes) {
       const docState = this.documents[docName];
-
       if (docState.file && docState.status === 'selected' && !docState.isUploading) {
         docState.isUploading = true;
         docState.status = 'uploading';
@@ -500,19 +663,17 @@ export class DashboardAdminPwComponent implements OnInit, OnDestroy {
         docState.errorMessage = undefined;
 
         const normalizedDocName = docName.replace(/\s+/g, '');
-        // La ruta de Storage está bien construida aquí
         const filePath = `users/${this.selectedBecario.uid}/documentos/${normalizedDocName}_${docState.file.name}`;
         console.log('Ruta de Storage para el documento (Admin):', filePath);
         const fileRef = ref(this.storage, filePath);
         const uploadTask = uploadBytesResumable(fileRef, docState.file);
-
         const uploadPromise = new Promise<void>((resolve, reject) => {
           uploadTask.on('state_changed',
             (snapshot) => {
               const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
               docState.uploadProgress = Math.round(progress);
             },
-            (error: any) => { // Tipado 'error: any'
+            (error: any) => {
               console.error(`Error al subir "${docName}" (Admin):`, error);
               docState.status = 'error';
               docState.errorMessage = `Error al subir: ${error.message}`;
@@ -533,10 +694,9 @@ export class DashboardAdminPwComponent implements OnInit, OnDestroy {
                   nombreArchivo: docState.file!.name,
                   fechaSubida: new Date()
                 }, { merge: true });
-
                 console.log(`Documento "${docName}" subido y metadatos guardados (Admin):`, downloadURL);
                 resolve();
-              } catch (error: any) { // Tipado 'error: any'
+              } catch (error: any) {
                 console.error(`Error al obtener URL de descarga o guardar en Firestore para "${docName}" (Admin):`, error);
                 docState.status = 'error';
                 docState.errorMessage = `Error al guardar URL: ${error.message}`;
@@ -551,29 +711,27 @@ export class DashboardAdminPwComponent implements OnInit, OnDestroy {
     }
 
     if (uploadPromises.length === 0) {
-      this.showMessageBox('No hay nuevos documentos seleccionados o modificados para guardar.'); // Reemplazado alert
+      this.showMessageBox('No hay nuevos documentos seleccionados o modificados para guardar.');
       return;
     }
 
     try {
       await Promise.all(uploadPromises);
-      this.showMessageBox(`Expediente del becario ${this.selectedBecario!.displayName} guardado con éxito.`); // Reemplazado alert
-    } catch (error: any) { // Tipado 'error: any'
-      this.showMessageBox('Hubo un error al guardar algunos documentos. Por favor, revisa la consola para más detalles.'); // Reemplazado alert
+      this.showMessageBox(`Expediente del becario ${this.selectedBecario!.displayName} guardado con éxito.`);
+    } catch (error: any) {
+      this.showMessageBox('Hubo un error al guardar algunos documentos. Por favor, revisa la consola para más detalles.');
     }
   }
 
   prevDocumentAdmin(): void {
-    this.currentDocumentIndex = (this.currentDocumentIndex === 0) ?
-      this.documentTypes.length - 1 :
+    this.currentDocumentIndex = (this.currentDocumentIndex === 0) ? this.documentTypes.length - 1 :
       this.currentDocumentIndex - 1;
     this.updatePreviewForCurrentDocumentAdmin();
   }
 
   nextDocumentAdmin(): void {
     this.currentDocumentIndex = (this.currentDocumentIndex === this.documentTypes.length - 1) ?
-      0 :
-      this.currentDocumentIndex + 1;
+      0 : this.currentDocumentIndex + 1;
     this.updatePreviewForCurrentDocumentAdmin();
   }
 
@@ -581,9 +739,9 @@ export class DashboardAdminPwComponent implements OnInit, OnDestroy {
     return this.currentDocumentIndex === index;
   }
 
-  // --- Custom Message Box (instead of alert) ---
   private showMessageBox(message: string): void {
     console.log("APP MESSAGE:", message);
     // Puedes añadir una UI más avanzada para mostrar el mensaje aquí
   }
 }
+
