@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
 /* src/styles.css */
 
 /* --- Variables CSS Globales para la Paleta de Colores y Estilos --- */
@@ -36,7 +37,6 @@
 }
 
 /* Importa la fuente Inter */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
 
 /* Reglas globales y de reseteo */
 * {

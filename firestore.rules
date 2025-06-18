@@ -1,0 +1,54 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Función para verificar si el usuario que realiza la solicitud es un administrador.
+    // Requiere que el usuario esté autenticado y que su documento en Firestore
+    // en la colección 'users' tenga el campo 'role' con valor 'admin'.
+    function isAdmin() {
+      return request.auth != null && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+
+    // Permite la lectura pública de los documentos en la colección 'estadosMex'.
+    match /estadosMex/{estadoId} {
+      allow read: if true;
+    }
+
+    // Permite la lectura pública de los documentos en la colección 'figurasInpi'.
+    match /figurasInpi/{figuraId} {
+      allow read: if true;
+    }
+
+    // Reglas para los perfiles de usuario y sus documentos internos en Firestore.
+    // Permite a un usuario leer/escribir su propio perfil/documentos.
+    // Permite a un administrador leer/escribir cualquier perfil/documentos de usuario.
+    match /users/{userId} {
+      allow read: if request.auth != null && (request.auth.uid == userId || isAdmin());
+      allow write: if request.auth != null && (request.auth.uid == userId || isAdmin());
+
+      // Reglas para subcolección 'documentos' dentro de cada perfil de usuario en Firestore.
+      match /documentos/{documentId} {
+        allow read: if request.auth != null && (request.auth.uid == userId || isAdmin());
+        allow write: if request.auth != null && (request.auth.uid == userId || isAdmin());
+      }
+    }
+
+    // Reglas para la colección de notificaciones.
+    // Permite a los administradores leer, actualizar y eliminar notificaciones.
+    match /notifications/{notificationId} {
+      allow read, update, delete: if isAdmin();
+      // Si los administradores también crean nuevas notificaciones desde el frontend,
+      // deberías añadir 'create' aquí:
+      // allow read, create, update, delete: if isAdmin();
+      // Si las notificaciones se crean exclusivamente mediante Cloud Functions,
+      // entonces 'create' no es necesario en estas reglas.
+    }
+
+    // Regla de denegación por defecto:
+    // Niega el acceso de lectura y escritura a cualquier otra colección o documento
+    // que no esté explícitamente cubierta por las reglas anteriores.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

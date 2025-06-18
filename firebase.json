@@ -2,7 +2,7 @@
   "functions": [
     {
       "source": "functions",
-      "codebase": "default",
+      "codebase": "api-inpi",
       "ignore": [
         "node_modules",
         ".git",
@@ -14,5 +14,26 @@
         "npm --prefix \"$RESOURCE_DIR\" run build"
       ]
     }
-  ]
+  ],
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  },
+  "storage": {
+    "rules": "storage.rules"
+  },
+  "hosting": {
+    "public": "dist/inpi-pw/browser",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
 }
