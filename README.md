@@ -62,5 +62,5 @@ For more information on using the Angular CLI, including detailed command refere
 
 Este es un proyecto desarrollado para fines académicos.  
 **No está permitido su uso, redistribución o copia sin autorización de los autores.**  
-© 2025 Alba Monrreal Farid Hassany, Corral García Oswaldo Manuel, Fernández de los Santos Jorge Alejandro, Mayorquin Galindo Alexia Noemi. Licenciado bajo CC BY-NC-ND 4.0.
+© lLicenciado bajo CC BY-NC-ND 4.0.
 
